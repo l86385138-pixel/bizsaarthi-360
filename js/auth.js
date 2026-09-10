@@ -1,24 +1,30 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
   getFirestore,
   doc,
   setDoc,
+  getDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-import { firebaseConfig } from "./firebase-config.js";
+import {
+  firebaseConfig
+} from "./firebase-config.js";
 
 
-// ===============================
+// =====================================
 // FIREBASE INITIALIZATION
-// ===============================
+// =====================================
 
 const app = initializeApp(firebaseConfig);
 
@@ -27,25 +33,35 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-// ===============================
+// =====================================
 // ELEMENTS
-// ===============================
+// =====================================
 
-const loginTab = document.getElementById("loginTab");
-const signupTab = document.getElementById("signupTab");
+const loginTab =
+  document.getElementById("loginTab");
 
-const loginPanel = document.getElementById("loginPanel");
-const signupPanel = document.getElementById("signupPanel");
+const signupTab =
+  document.getElementById("signupTab");
 
-const loginForm = document.getElementById("loginForm");
-const signupForm = document.getElementById("signupForm");
+const loginPanel =
+  document.getElementById("loginPanel");
 
-const message = document.getElementById("message");
+const signupPanel =
+  document.getElementById("signupPanel");
+
+const loginForm =
+  document.getElementById("loginForm");
+
+const signupForm =
+  document.getElementById("signupForm");
+
+const message =
+  document.getElementById("message");
 
 
-// ===============================
-// MESSAGE FUNCTION
-// ===============================
+// =====================================
+// MESSAGE
+// =====================================
 
 function showMessage(text, type = "") {
 
@@ -60,16 +76,18 @@ function showMessage(text, type = "") {
 }
 
 
-// ===============================
-// LOGIN / SIGNUP TAB
-// ===============================
+// =====================================
+// LOGIN / SIGNUP TABS
+// =====================================
 
 loginTab.addEventListener("click", () => {
 
   loginTab.classList.add("active");
+
   signupTab.classList.remove("active");
 
   loginPanel.classList.remove("hidden");
+
   signupPanel.classList.add("hidden");
 
   showMessage("");
@@ -80,9 +98,11 @@ loginTab.addEventListener("click", () => {
 signupTab.addEventListener("click", () => {
 
   signupTab.classList.add("active");
+
   loginTab.classList.remove("active");
 
   signupPanel.classList.remove("hidden");
+
   loginPanel.classList.add("hidden");
 
   showMessage("");
@@ -90,285 +110,393 @@ signupTab.addEventListener("click", () => {
 });
 
 
-// ===============================
-// BUSINESS / CUSTOMER SIGNUP
-// ===============================
+// =====================================
+// SIGNUP
+// =====================================
 
-signupForm.addEventListener("submit", async (event) => {
+signupForm.addEventListener(
+  "submit",
+  async (event) => {
 
-  event.preventDefault();
-
-  showMessage("Creating your account...", "ok");
-
-
-  const accountType =
-    document.getElementById("accountType").value;
-
-  const name =
-    document.getElementById("name").value.trim();
-
-  const mobile =
-    document.getElementById("mobile").value.trim();
-
-  const email =
-    document.getElementById("email").value.trim();
-
-  const password =
-    document.getElementById("password").value;
-
-
-  // ===============================
-  // MOBILE VALIDATION
-  // ===============================
-
-  const cleanMobile =
-    mobile.replace(/\D/g, "");
-
-
-  if (cleanMobile.length !== 10) {
+    event.preventDefault();
 
     showMessage(
-      "Please enter a valid 10-digit mobile number.",
-      "err"
+      "Creating your account...",
+      "ok"
     );
 
-    return;
-  }
+
+    const accountType =
+      document
+        .getElementById("accountType")
+        .value;
 
 
-  // ===============================
-  // PASSWORD VALIDATION
-  // ===============================
-
-  if (password.length < 6) {
-
-    showMessage(
-      "Password must contain at least 6 characters.",
-      "err"
-    );
-
-    return;
-  }
+    const name =
+      document
+        .getElementById("name")
+        .value
+        .trim();
 
 
-  try {
+    const mobile =
+      document
+        .getElementById("mobile")
+        .value
+        .trim();
 
-    // ===============================
-    // CREATE FIREBASE ACCOUNT
-    // ===============================
 
-    const userCredential =
-      await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
+    const email =
+      document
+        .getElementById("email")
+        .value
+        .trim();
+
+
+    const password =
+      document
+        .getElementById("password")
+        .value;
+
+
+    // =================================
+    // MOBILE VALIDATION
+    // =================================
+
+    const cleanMobile =
+      mobile.replace(/\D/g, "");
+
+
+    if (cleanMobile.length !== 10) {
+
+      showMessage(
+        "Please enter a valid 10-digit mobile number.",
+        "err"
+      );
+
+      return;
+    }
+
+
+    // =================================
+    // PASSWORD VALIDATION
+    // =================================
+
+    if (password.length < 6) {
+
+      showMessage(
+        "Password must contain at least 6 characters.",
+        "err"
+      );
+
+      return;
+    }
+
+
+    try {
+
+      // =================================
+      // CREATE AUTH ACCOUNT
+      // =================================
+
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+      const user =
+        userCredential.user;
+
+
+      // =================================
+      // SAVE USER PROFILE
+      // =================================
+
+      await setDoc(
+        doc(db, "users", user.uid),
+        {
+
+          uid: user.uid,
+
+          role: accountType,
+
+          name: name,
+
+          mobile: cleanMobile,
+
+          email: email,
+
+          status: "active",
+
+          createdAt: serverTimestamp()
+
+        }
       );
 
 
-    const user =
-      userCredential.user;
+      // =================================
+      // SUCCESS
+      // =================================
+
+      showMessage(
+        "Account created successfully! Opening dashboard...",
+        "ok"
+      );
 
 
-    // ===============================
-    // SAVE USER PROFILE
-    // ===============================
+      // Give Firebase a moment
+      setTimeout(() => {
 
-    await setDoc(
-      doc(db, "users", user.uid),
-      {
+        window.location.href =
+          "dashboard.html";
 
-        uid: user.uid,
+      }, 1000);
 
-        role: accountType,
 
-        name: name,
+    } catch (error) {
 
-        mobile: cleanMobile,
+      console.error(
+        "Signup Error:",
+        error
+      );
 
-        email: email,
 
-        status: "active",
+      let errorMessage =
+        "Something went wrong.";
 
-        createdAt: serverTimestamp()
+
+      if (
+        error.code ===
+        "auth/email-already-in-use"
+      ) {
+
+        errorMessage =
+          "This email is already registered.";
 
       }
-    );
+
+      else if (
+        error.code ===
+        "auth/invalid-email"
+      ) {
+
+        errorMessage =
+          "Please enter a valid email address.";
+
+      }
+
+      else if (
+        error.code ===
+        "auth/weak-password"
+      ) {
+
+        errorMessage =
+          "Password must contain at least 6 characters.";
+
+      }
+
+      else if (
+        error.code ===
+        "auth/network-request-failed"
+      ) {
+
+        errorMessage =
+          "Network error. Please try again.";
+
+      }
+
+      else if (
+        error.code ===
+        "permission-denied"
+      ) {
+
+        errorMessage =
+          "Firestore permission denied.";
+
+      }
 
 
-    // ===============================
-    // SUCCESS
-    // ===============================
-
-    showMessage(
-      "Account created successfully!",
-      "ok"
-    );
-
-
-    signupForm.reset();
-
-
-  } catch (error) {
-
-    console.error(error);
-
-
-    let errorMessage =
-      error.message || "Something went wrong.";
-
-
-    // Friendly Firebase messages
-
-    if (error.code === "auth/email-already-in-use") {
-
-      errorMessage =
-        "This email is already registered.";
-
-    }
-
-    else if (error.code === "auth/invalid-email") {
-
-      errorMessage =
-        "Please enter a valid email address.";
-
-    }
-
-    else if (error.code === "auth/weak-password") {
-
-      errorMessage =
-        "Password is too weak.";
-
-    }
-
-    else if (
-      error.code ===
-      "auth/network-request-failed"
-    ) {
-
-      errorMessage =
-        "Network error. Please try again.";
+      showMessage(
+        errorMessage,
+        "err"
+      );
 
     }
-
-    else if (
-      error.code ===
-      "permission-denied"
-    ) {
-
-      errorMessage =
-        "Firestore permission denied.";
-
-    }
-
-
-    showMessage(
-      errorMessage,
-      "err"
-    );
 
   }
+);
 
-});
 
-
-// ===============================
+// =====================================
 // LOGIN
-// ===============================
+// =====================================
 
-loginForm.addEventListener("submit", async (event) => {
+loginForm.addEventListener(
+  "submit",
+  async (event) => {
 
-  event.preventDefault();
-
-  showMessage("Signing in...", "ok");
-
-
-  const email =
-    document.getElementById("loginEmail")
-      .value
-      .trim();
-
-  const password =
-    document.getElementById("loginPassword")
-      .value;
-
-
-  try {
-
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
+    event.preventDefault();
 
     showMessage(
-      "Login successful!",
+      "Signing in...",
       "ok"
     );
 
 
-    /*
-      Dashboard will be connected
-      in the next development step.
-    */
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
 
 
-  } catch (error) {
-
-    console.error(error);
-
-
-    let errorMessage =
-      error.message ||
-      "Login failed.";
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
 
 
-    if (
-      error.code ===
-      "auth/invalid-credential"
-    ) {
+    try {
 
-      errorMessage =
-        "Incorrect email or password.";
+      // =================================
+      // FIREBASE LOGIN
+      // =================================
+
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+      const user =
+        userCredential.user;
+
+
+      // =================================
+      // CHECK USER PROFILE
+      // =================================
+
+      const userDoc =
+        await getDoc(
+          doc(db, "users", user.uid)
+        );
+
+
+      if (!userDoc.exists()) {
+
+        showMessage(
+          "User profile not found.",
+          "err"
+        );
+
+        await signOut(auth);
+
+        return;
+      }
+
+
+      // =================================
+      // LOGIN SUCCESS
+      // =================================
+
+      showMessage(
+        "Login successful! Opening dashboard...",
+        "ok"
+      );
+
+
+      setTimeout(() => {
+
+        window.location.href =
+          "dashboard.html";
+
+      }, 700);
+
+
+    } catch (error) {
+
+      console.error(
+        "Login Error:",
+        error
+      );
+
+
+      let errorMessage =
+        "Login failed.";
+
+
+      if (
+        error.code ===
+        "auth/invalid-credential"
+      ) {
+
+        errorMessage =
+          "Incorrect email or password.";
+
+      }
+
+      else if (
+        error.code ===
+        "auth/user-not-found"
+      ) {
+
+        errorMessage =
+          "Account not found.";
+
+      }
+
+      else if (
+        error.code ===
+        "auth/wrong-password"
+      ) {
+
+        errorMessage =
+          "Incorrect password.";
+
+      }
+
+      else if (
+        error.code ===
+        "auth/invalid-email"
+      ) {
+
+        errorMessage =
+          "Please enter a valid email.";
+
+      }
+
+      else if (
+        error.code ===
+        "auth/network-request-failed"
+      ) {
+
+        errorMessage =
+          "Network error. Please try again.";
+
+      }
+
+      else if (
+        error.code ===
+        "permission-denied"
+      ) {
+
+        errorMessage =
+          "Firestore permission denied.";
+
+      }
+
+
+      showMessage(
+        errorMessage,
+        "err"
+      );
 
     }
-
-    else if (
-      error.code ===
-      "auth/user-not-found"
-    ) {
-
-      errorMessage =
-        "Account not found.";
-
-    }
-
-    else if (
-      error.code ===
-      "auth/wrong-password"
-    ) {
-
-      errorMessage =
-        "Incorrect password.";
-
-    }
-
-    else if (
-      error.code ===
-      "auth/invalid-email"
-    ) {
-
-      errorMessage =
-        "Please enter a valid email.";
-
-    }
-
-
-    showMessage(
-      errorMessage,
-      "err"
-    );
 
   }
-
-});
+);
