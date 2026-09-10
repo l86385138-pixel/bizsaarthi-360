@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Business</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#172033}.wrap{max-width:1000px;margin:auto;padding:20px}.card{background:#fff;border:1px solid #e5eaf1;border-radius:18px;overflow:hidden;box-shadow:0 8px 30px rgba(15,76,129,.08)}.hero{background:linear-gradient(135deg,#0f4c81,#1769aa);color:#fff;padding:34px;display:flex;gap:22px;align-items:center}.logo{width:100px;height:100px;border-radius:18px;background:#fff;color:#0f4c81;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:800;overflow:hidden;flex:none}.logo img{width:100%;height:100%;object-fit:cover}.hero h1{margin:0 0 8px;font-size:30px}.hero p{margin:4px 0;opacity:.9}.body{padding:28px}.section{margin-bottom:26px}.section h2{font-size:19px;margin:0 0 10px}.about{line-height:1.7;color:#536174;white-space:pre-wrap}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.info{border:1px solid #e5eaf1;border-radius:12px;padding:15px;background:#fafcff}.label{font-size:11px;color:#7b8798;margin-bottom:5px}.value{font-size:14px;word-break:break-word}.links{display:flex;flex-wrap:wrap;gap:10px}.links a{display:inline-block;padding:10px 14px;border-radius:9px;background:#eef6ff;color:#0f4c81;text-decoration:none;font-weight:700;font-size:13px}.error{text-align:center;padding:60px 20px}.error h1{font-size:28px}.error p{color:#667085}footer{text-align:center;padding:22px;color:#7b8798;font-size:12px}@media(max-width:650px){.hero{padding:24px;align-items:flex-start}.hero h1{font-size:23px}.logo{width:75px;height:75px;font-size:28px}.grid{grid-template-columns:1fr}.body{padding:20px}}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="card" id="app"><div class="error"><h1>Loading...</h1><p>Please wait.</p></div></div><footer>© Great India Technology. All Rights Reserved.</footer></div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import{getFirestore,collection,query,where,getDocs}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import{firebaseConfig}from"./js/firebase-config.js";
+const app=initializeApp(firebaseConfig),db=getFirestore(app),root=document.getElementById("app");
+const esc=s=>String(s??"").replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+const slug=new URLSearchParams(location.search).get("business");
+function fail(title,msg){root.innerHTML=`<div class="error"><h1>${esc(title)}</h1><p>${esc(msg)}</p></div>`}
+if(!slug){fail("Business page not found","No business name was supplied in the link.");throw new Error("Missing business slug")}
+try{
+ const q=query(collection(db,"businesses"),where("publicSlug","==",slug));
+ const snap=await getDocs(q);
+ if(snap.empty){fail("Business not found","This public business link is invalid or the business profile has not been published yet.");throw new Error("Business not found")}
+ const d=snap.docs[0].data();
+ const name=d.businessName||"Business";
+ const logo=d.logoData?`<img src="${d.logoData}" alt="${esc(name)} logo">`:esc(name.charAt(0).toUpperCase());
+ const address=[d.officeAddress,d.city,d.state,d.pinCode].filter(Boolean).join(", ");
+ const links=[];
+ if(d.mobile)links.push(`<a href="tel:${esc(d.mobile)}">Call ${esc(d.mobile)}</a>`);
+ if(d.whatsapp)links.push(`<a href="https://wa.me/${String(d.whatsapp).replace(/\D/g,"")}" target="_blank" rel="noopener">WhatsApp</a>`);
+ if(d.website)links.push(`<a href="${esc(d.website)}" target="_blank" rel="noopener">Website</a>`);
+ if(d.facebook)links.push(`<a href="${esc(d.facebook)}" target="_blank" rel="noopener">Facebook</a>`);
+ if(d.instagram)links.push(`<a href="${esc(d.instagram)}" target="_blank" rel="noopener">Instagram</a>`);
+ root.innerHTML=`<div class="hero"><div class="logo">${logo}</div><div><h1>${esc(name)}</h1><p>${esc(d.ownerName?"Owner: "+d.ownerName:"")}</p><p>${esc(address)}</p></div></div><div class="body"><div class="section"><h2>About Business</h2><div class="about">${esc(d.description||"Business information will be available here.")}</div></div>${address?`<div class="section"><h2>Office Address</h2><div class="info"><div class="value">${esc(address)}</div></div></div>`:""}${links.length?`<div class="section"><h2>Contact</h2><div class="links">${links.join("")}</div></div>`:""}</div>`;
+ document.title=name;
+}catch(e){console.error(e);if(!root.querySelector(".hero"))fail("Unable to open business page","Please check the public link and Firestore public-read permission.")}
+</script>
+</body>
+</html>
