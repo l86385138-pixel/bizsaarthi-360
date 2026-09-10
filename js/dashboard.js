@@ -24,15 +24,16 @@ import {
 // =====================================
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
-
 const db = getFirestore(app);
 
 
 // =====================================
 // ELEMENTS
 // =====================================
+
+const loadingScreen =
+  document.getElementById("loadingScreen");
 
 const userName =
   document.getElementById("userName");
@@ -45,31 +46,61 @@ const logoutBtn =
 
 
 // =====================================
-// LOAD USER
+// HIDE LOADING
+// =====================================
+
+function hideLoading() {
+  if (loadingScreen) {
+    loadingScreen.style.display = "none";
+  }
+}
+
+
+// =====================================
+// SHOW ERROR
+// =====================================
+
+function showDashboardError(message) {
+
+  hideLoading();
+
+  console.error(message);
+
+  const welcomeTitle =
+    document.querySelector(".welcome-card h2");
+
+  if (welcomeTitle) {
+    welcomeTitle.textContent = "Welcome 👋";
+  }
+
+}
+
+
+// =====================================
+// AUTH STATE
 // =====================================
 
 onAuthStateChanged(
   auth,
   async (user) => {
 
-    // =================================
-    // USER NOT LOGGED IN
-    // =================================
+    // ================================
+    // NOT LOGGED IN
+    // ================================
 
     if (!user) {
 
-      window.location.href =
-        "index.html";
+      window.location.href = "index.html";
 
       return;
     }
 
 
-    try {
+    // ================================
+    // USER LOGGED IN
+    // ================================
 
-      // =================================
-      // GET USER PROFILE
-      // =================================
+    try {
 
       const userRef =
         doc(
@@ -83,58 +114,78 @@ onAuthStateChanged(
         await getDoc(userRef);
 
 
-      // =================================
+      // ================================
       // PROFILE NOT FOUND
-      // =================================
+      // ================================
 
       if (!userSnapshot.exists()) {
 
-        userName.textContent =
-          user.email || "User";
+        const fallbackName =
+          user.displayName ||
+          user.email ||
+          "User";
 
-        userAvatar.textContent =
-          "U";
+        if (userName) {
+          userName.textContent =
+            fallbackName;
+        }
+
+        if (userAvatar) {
+          userAvatar.textContent =
+            fallbackName
+              .trim()
+              .charAt(0)
+              .toUpperCase();
+        }
+
+        hideLoading();
 
         return;
       }
 
 
+      // ================================
+      // USER DATA
+      // ================================
+
       const userData =
         userSnapshot.data();
 
 
-      // =================================
-      // NAME
-      // =================================
-
       const name =
         userData.name ||
+        user.displayName ||
         user.email ||
         "User";
 
 
-      userName.textContent =
-        name;
+      // ================================
+      // NAME
+      // ================================
+
+      if (userName) {
+        userName.textContent = name;
+      }
 
 
-      // =================================
+      // ================================
       // AVATAR
-      // =================================
+      // ================================
 
-      const firstLetter =
-        name
-          .trim()
-          .charAt(0)
-          .toUpperCase();
+      if (userAvatar) {
+
+        userAvatar.textContent =
+          name
+            .trim()
+            .charAt(0)
+            .toUpperCase();
+
+      }
 
 
-      userAvatar.textContent =
-        firstLetter;
-
-
-      // =================================
+      // ================================
       // ROLE
-      // =================================
+      // ================================
 
       const role =
         userData.role ||
@@ -149,29 +200,17 @@ onAuthStateChanged(
 
       if (roleElement) {
 
-        if (
-          role ===
-          "business_owner"
-        ) {
-
-          roleElement.textContent =
-            "Business Owner";
-
-        }
-
-        else {
-
-          roleElement.textContent =
-            "Customer";
-
-        }
+        roleElement.textContent =
+          role === "business_owner"
+            ? "Business Owner"
+            : "Customer";
 
       }
 
 
-      // =================================
-      // WELCOME MESSAGE
-      // =================================
+      // ================================
+      // WELCOME
+      // ================================
 
       const welcomeTitle =
         document.querySelector(
@@ -187,11 +226,22 @@ onAuthStateChanged(
       }
 
 
+      // ================================
+      // IMPORTANT
+      // ================================
+
+      hideLoading();
+
+
     } catch (error) {
 
       console.error(
         "Dashboard Error:",
         error
+      );
+
+      showDashboardError(
+        "Unable to load profile"
       );
 
     }
@@ -204,29 +254,33 @@ onAuthStateChanged(
 // LOGOUT
 // =====================================
 
-logoutBtn.addEventListener(
-  "click",
-  async () => {
+if (logoutBtn) {
 
-    try {
+  logoutBtn.addEventListener(
+    "click",
+    async () => {
 
-      await signOut(auth);
+      try {
 
-      window.location.href =
-        "index.html";
+        await signOut(auth);
 
-    } catch (error) {
+        window.location.href =
+          "index.html";
 
-      console.error(
-        "Logout Error:",
-        error
-      );
+      } catch (error) {
 
-      alert(
-        "Logout failed. Please try again."
-      );
+        console.error(
+          "Logout Error:",
+          error
+        );
+
+        alert(
+          "Logout failed. Please try again."
+        );
+
+      }
 
     }
+  );
 
-  }
-);
+}
