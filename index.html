@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BizSaarthi 360 | Great India Technology</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <div class="auth-container">
+
+    <!-- LEFT BRAND SECTION -->
+    <section class="brand-section">
+
+      <div class="brand-logo">
+        <span class="logo-box">B</span>
+        <span>BizSaarthi <strong>360</strong></span>
+      </div>
+
+      <div class="brand-content">
+
+        <h1>
+          Your Business.<br>
+          Your Services.<br>
+          Your Digital Presence.
+        </h1>
+
+        <p>
+          Professional business management and digital presence
+          platform by Great India Technology.
+        </p>
+
+        <div class="features">
+          <div>✓ Manage your business profile</div>
+          <div>✓ Manage services and applications</div>
+          <div>✓ Secure customer management</div>
+          <div>✓ Build your digital business presence</div>
+        </div>
+
+      </div>
+
+      <footer>
+        © Great India Technology. All Rights Reserved.
+      </footer>
+
+    </section>
+
+
+    <!-- RIGHT LOGIN/SIGNUP SECTION -->
+    <main class="auth-section">
+
+      <div class="auth-card">
+
+        <!-- MOBILE BRAND -->
+        <div class="mobile-brand">
+          <span class="logo-box">B</span>
+          <span>BizSaarthi <strong>360</strong></span>
+        </div>
+
+
+        <!-- TABS -->
+        <div class="auth-tabs">
+
+          <button
+            class="auth-tab active"
+            id="loginTab"
+            type="button">
+            Login
+          </button>
+
+          <button
+            class="auth-tab"
+            id="signupTab"
+            type="button">
+            Create Account
+          </button>
+
+        </div>
+
+
+        <!-- LOGIN -->
+        <div id="loginPanel">
+
+          <h2>Welcome Back</h2>
+
+          <p class="subtitle">
+            Login to manage your account.
+          </p>
+
+          <form id="loginForm">
+
+            <div class="form-group">
+
+              <label for="loginEmail">
+                Email Address
+              </label>
+
+              <input
+                type="email"
+                id="loginEmail"
+                placeholder="you@example.com"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="loginPassword">
+                Password
+              </label>
+
+              <input
+                type="password"
+                id="loginPassword"
+                placeholder="Enter your password"
+                required>
+
+            </div>
+
+
+            <button
+              type="submit"
+              class="primary-button">
+
+              Login
+
+            </button>
+
+          </form>
+
+        </div>
+
+
+        <!-- SIGNUP -->
+        <div
+          id="signupPanel"
+          class="hidden">
+
+          <h2>Create Account</h2>
+
+          <p class="subtitle">
+            Create your BizSaarthi 360 account.
+          </p>
+
+
+          <form id="signupForm">
+
+            <div class="form-group">
+
+              <label for="accountType">
+                Account Type
+              </label>
+
+              <select id="accountType">
+
+                <option value="business_owner">
+                  Business Owner
+                </option>
+
+                <option value="customer">
+                  Customer
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="name">
+                Full Name
+              </label>
+
+              <input
+                type="text"
+                id="name"
+                placeholder="Enter your full name"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="mobile">
+                Mobile Number
+              </label>
+
+              <input
+                type="tel"
+                id="mobile"
+                maxlength="10"
+                placeholder="10-digit mobile number"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="email">
+                Email Address
+              </label>
+
+              <input
+                type="email"
+                id="email"
+                placeholder="you@example.com"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="password">
+                Password
+              </label>
+
+              <input
+                type="password"
+                id="password"
+                minlength="6"
+                placeholder="Minimum 6 characters"
+                required>
+
+            </div>
+
+
+            <button
+              type="submit"
+              class="primary-button">
+
+              Create Account
+
+            </button>
+
+          </form>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+        <div
+          id="message"
+          class="message">
+        </div>
+
+
+        <p class="security-note">
+          Mobile number is used for contact only.
+          No OTP is required.
+        </p>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <script
+    type="module"
+    src="js/auth.js">
+  </script>
+
+</body>
+</html>
