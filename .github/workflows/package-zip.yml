@@ -1,0 +1,26 @@
+name: Package BizSaarthi 360 ZIP
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create ZIP
+        run: |
+          zip -r BizSaarthi-360-FIXED.zip . -x '.git/*' '.github/workflows/package-zip.yml'
+
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: BizSaarthi-360-FIXED
+          path: BizSaarthi-360-FIXED.zip
+          retention-days: 7
