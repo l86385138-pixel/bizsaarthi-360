@@ -32,6 +32,13 @@ const auth = getAuth(app);
 
 const db = getFirestore(app);
 
+async function redirectByRole(uid, fallback = "dashboard.html") {
+  const profile = await getDoc(doc(db, "users", uid));
+  if (!profile.exists()) { window.location.href = fallback; return; }
+  window.location.href = profile.data().role === "customer" ? "customer-dashboard.html" : fallback;
+}
+
+
 
 // =====================================
 // ELEMENTS
@@ -248,10 +255,9 @@ signupForm.addEventListener(
 
 
       // Give Firebase a moment
-      setTimeout(() => {
+      setTimeout(async () => {
 
-        window.location.href =
-          "dashboard.html";
+        await redirectByRole(user.uid);
 
       }, 1000);
 
@@ -410,10 +416,9 @@ loginForm.addEventListener(
       );
 
 
-      setTimeout(() => {
+      setTimeout(async () => {
 
-        window.location.href =
-          "dashboard.html";
+        await redirectByRole(user.uid);
 
       }, 700);
 

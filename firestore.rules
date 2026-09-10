@@ -16,14 +16,11 @@ service cloud.firestore {
       allow read, update, delete: if owner(userId);
     }
 
-    // Business profiles are publicly readable so public business pages work.
-    // Only the authenticated owner can create/update/delete their own profile.
     match /businesses/{businessId} {
       allow read: if true;
       allow create, update, delete: if owner(businessId);
     }
 
-    // A service belongs to a business. The business owner controls it.
     match /services/{serviceId} {
       allow read: if true;
       allow create: if signedIn()
@@ -32,42 +29,62 @@ service cloud.firestore {
         && resource.data.businessId == request.auth.uid;
     }
 
-    // Customer applications: customer can create/read their own; business owner
-    // can read/update applications belonging to their business.
     match /applications/{applicationId} {
       allow create: if signedIn()
         && request.resource.data.customerId == request.auth.uid;
+
       allow read: if signedIn()
-        && (resource.data.customerId == request.auth.uid
-            || resource.data.businessId == request.auth.uid);
+        && (
+          resource.data.customerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+        );
+
       allow update: if signedIn()
         && resource.data.businessId == request.auth.uid;
+
       allow delete: if signedIn()
-        && (resource.data.customerId == request.auth.uid
-            || resource.data.businessId == request.auth.uid);
+        && (
+          resource.data.customerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+        );
     }
 
     match /applicationHistory/{historyId} {
       allow read: if signedIn()
-        && (resource.data.customerId == request.auth.uid
-            || resource.data.businessId == request.auth.uid);
+        && (
+          resource.data.customerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+        );
+
       allow create: if signedIn()
-        && request.resource.data.updatedBy == request.auth.uid;
+        && request.resource.data.updatedBy == request.auth.uid
+        && (
+          request.resource.data.customerId == request.auth.uid
+          || request.resource.data.businessId == request.auth.uid
+        );
+
       allow update, delete: if false;
     }
 
     match /notifications/{notificationId} {
       allow read, update: if signedIn()
         && resource.data.userId == request.auth.uid;
-      allow create: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid;
       allow delete: if signedIn()
         && resource.data.userId == request.auth.uid;
     }
 
     match /reports/{reportId} {
-      allow read, create, update, delete: if signedIn()
-        && (resource.data.businessId == request.auth.uid
-            || request.resource.data.businessId == request.auth.uid);
+      allow read: if signedIn()
+        && resource.data.businessId == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.businessId == request.auth.uid;
+      allow update: if signedIn()
+        && resource.data.businessId == request.auth.uid
+        && request.resource.data.businessId == request.auth.uid;
+      allow delete: if signedIn()
+        && resource.data.businessId == request.auth.uid;
     }
 
     match /{document=**} {

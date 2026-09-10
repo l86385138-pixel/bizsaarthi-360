@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Customers | BizSaarthi 360</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}.top{height:70px;background:#fff;border-bottom:1px solid #e5eaf1;display:flex;align-items:center;justify-content:space-between;padding:0 28px}.brand{font-size:20px;font-weight:800;color:#0f4c81}.brand strong{color:#1769aa}.wrap{max-width:1200px;margin:auto;padding:28px}.head{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}.head h1{margin:0 0 6px;font-size:25px}.head p{margin:0;color:#718096;font-size:12px}.btn{border:0;border-radius:8px;padding:10px 15px;background:#0f4c81;color:#fff;font-weight:700;cursor:pointer}.btn.light{background:#edf2f7;color:#344054}.card{background:#fff;border:1px solid #e5eaf1;border-radius:14px;padding:20px;margin-bottom:18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:18px}.stat b{font-size:28px}.stat span{display:block;color:#718096;font-size:12px;margin-top:5px}.stat{background:#fff;border:1px solid #e5eaf1;border-radius:14px;padding:18px}.search{width:100%;padding:11px;border:1px solid #d9e0e8;border-radius:8px;margin-bottom:15px}.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid #edf0f4;vertical-align:top}.badge{padding:5px 9px;border-radius:14px;background:#edf6ff;color:#0f4c81;font-weight:700;font-size:10px}.select{padding:7px;border:1px solid #d9e0e8;border-radius:7px;font-size:11px}.msg{display:none;padding:10px;border-radius:8px;font-size:12px;margin-bottom:12px}.msg.show{display:block}.ok{background:#e9f8ef;color:#18794e}.err{background:#fff0f0;color:#c62828}@media(max-width:700px){.top{padding:0 15px}.wrap{padding:15px}.stats{grid-template-columns:1fr}.head{align-items:flex-start;gap:10px;flex-direction:column}.table{min-width:850px}.card{overflow:auto}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">BizSaarthi <strong>360</strong></div><button class="btn light" onclick="location.href='dashboard.html'">← Dashboard</button></header>
+<main class="wrap">
+<div class="head"><div><h1>Customers</h1><p>View customers and manage their service applications.</p></div></div>
+<div id="msg" class="msg"></div>
+<div class="stats"><div class="stat"><b id="customerCount">0</b><span>Customers</span></div><div class="stat"><b id="applicationCount">0</b><span>Applications</span></div><div class="stat"><b id="pendingCount">0</b><span>Pending</span></div></div>
+<div class="card"><input id="search" class="search" placeholder="Search customer, mobile, email, service or application number"><div style="overflow:auto"><table class="table"><thead><tr><th>Customer</th><th>Contact</th><th>Service</th><th>Application</th><th>Date</th><th>Status</th></tr></thead><tbody id="tbody"><tr><td colspan="6">Loading...</td></tr></tbody></table></div></div>
+</main>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import{getFirestore,collection,query,where,getDocs,updateDoc,doc,addDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import{firebaseConfig}from"./js/firebase-config.js";
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);let uid="",rows=[];
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function show(t,type="ok"){msg.textContent=t;msg.className="msg show "+type;setTimeout(()=>msg.className="msg",4500)}
+async function load(){
+ try{
+  const snap=await getDocs(query(collection(db,"applications"),where("businessId","==",uid)));
+  rows=[];snap.forEach(x=>rows.push({id:x.id,...x.data()}));
+  rows.sort((a,b)=>(b.applicationDate?.seconds||0)-(a.applicationDate?.seconds||0));
+  const ids=new Set(rows.map(x=>x.customerId));customerCount.textContent=ids.size;applicationCount.textContent=rows.length;pendingCount.textContent=rows.filter(x=>["pending","submitted","in_review"].includes(x.status)).length;render();
+ }catch(e){console.error(e);tbody.innerHTML='<tr><td colspan="6">Unable to load customers. Publish the latest Firestore rules in Firebase Console.</td></tr>'}
+}
+function render(){
+ const term=search.value.toLowerCase().trim();const data=rows.filter(x=>[x.customerName,x.customerMobile,x.customerEmail,x.serviceName,x.applicationNumber,x.businessName].some(v=>String(v||"").toLowerCase().includes(term)));
+ if(!data.length){tbody.innerHTML='<tr><td colspan="6">No customers/applications found.</td></tr>';return}
+ tbody.innerHTML=data.map(x=>`<tr><td><b>${esc(x.customerName)}</b></td><td>${esc(x.customerMobile)}<br>${esc(x.customerEmail)}</td><td>${esc(x.serviceName)}</td><td><b>${esc(x.applicationNumber||x.id.slice(0,8))}</b><br><small>${esc(x.details||"")}</small></td><td>${x.applicationDate?.toDate?x.applicationDate.toDate().toLocaleDateString():"-"}</td><td><select class="select" data-id="${x.id}">${["pending","in_review","approved","rejected","completed"].map(s=>`<option value="${s}" ${x.status===s?"selected":""}>${s.replace("_"," ")}</option>`).join("")}</select></td></tr>`).join("");
+ document.querySelectorAll(".select").forEach(el=>el.onchange=()=>changeStatus(el.dataset.id,el.value));
+}
+async function changeStatus(id,status){
+ try{
+  const x=rows.find(r=>r.id===id);await updateDoc(doc(db,"applications",id),{status,updatedAt:serverTimestamp()});
+  await addDoc(collection(db,"applicationHistory"),{applicationId:id,businessId:uid,customerId:x.customerId,status,message:"Status updated by business owner",updatedBy:uid,createdAt:serverTimestamp()});
+  show("Application status updated.");await load();
+ }catch(e){console.error(e);show(e.code==="permission-denied"?"Permission denied. Publish latest rules.":"Could not update status.","err")}
+}
+search.oninput=render;
+onAuthStateChanged(auth,user=>{if(!user){location.href="index.html";return}uid=user.uid;load()});
+</script>
+</body>
+</html>

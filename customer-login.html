@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Customer Login | BizSaarthi 360</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
+.card{width:100%;max-width:470px;background:#fff;border:1px solid #e5eaf1;border-radius:18px;box-shadow:0 12px 35px rgba(15,76,129,.1);padding:28px}
+.brand{text-align:center;color:#0f4c81;font-size:24px;font-weight:800;margin-bottom:6px}.brand strong{color:#1769aa}.sub{text-align:center;color:#718096;font-size:12px;margin-bottom:24px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:#edf3f8;padding:4px;border-radius:10px;margin-bottom:20px}.tab{border:0;background:transparent;padding:11px;border-radius:8px;cursor:pointer;font-weight:700;color:#667085}.tab.active{background:#fff;color:#0f4c81;box-shadow:0 2px 7px rgba(0,0,0,.06)}
+.form{display:flex;flex-direction:column;gap:12px}label{font-size:12px;font-weight:700;color:#344054}input{width:100%;padding:12px;border:1px solid #d9e0e8;border-radius:9px;font-size:13px;outline:none}input:focus{border-color:#1769aa;box-shadow:0 0 0 3px rgba(23,105,170,.09)}button.submit{border:0;background:#0f4c81;color:#fff;padding:13px;border-radius:9px;font-weight:700;cursor:pointer;margin-top:4px}.hidden{display:none}.msg{display:none;padding:11px;border-radius:9px;font-size:12px;margin-bottom:14px}.msg.show{display:block}.msg.ok{background:#e9f8ef;color:#18794e}.msg.err{background:#fff0f0;color:#c62828}.context{display:none;background:#eef8ff;border:1px solid #c5e3f7;padding:12px;border-radius:10px;font-size:12px;color:#345}.back{text-align:center;margin-top:18px;font-size:12px}.back a{color:#0f4c81;text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="brand">BizSaarthi <strong>360</strong></div>
+<div class="sub">Customer portal</div>
+<div id="context" class="context"></div>
+<div class="tabs"><button id="loginTab" class="tab active">Login</button><button id="registerTab" class="tab">Create Account</button></div>
+<div id="msg" class="msg"></div>
+
+<form id="loginForm" class="form">
+<label>Email</label><input id="loginEmail" type="email" required autocomplete="email">
+<label>Password</label><input id="loginPassword" type="password" required autocomplete="current-password">
+<button class="submit" type="submit">Login</button>
+</form>
+
+<form id="registerForm" class="form hidden">
+<label>Full Name</label><input id="regName" required>
+<label>Mobile Number</label><input id="regMobile" inputmode="numeric" maxlength="10" required>
+<label>Email</label><input id="regEmail" type="email" required autocomplete="email">
+<label>Password</label><input id="regPassword" type="password" minlength="6" required autocomplete="new-password">
+<button class="submit" type="submit">Create Customer Account</button>
+</form>
+<div class="back"><a href="javascript:history.back()">← Back</a></div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import{firebaseConfig}from"./js/firebase-config.js";
+
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const p=new URLSearchParams(location.search);
+const business=p.get("business")||"",service=p.get("service")||"";
+const context=document.getElementById("context"),msg=document.getElementById("msg");
+const loginTab=document.getElementById("loginTab"),registerTab=document.getElementById("registerTab");
+const loginForm=document.getElementById("loginForm"),registerForm=document.getElementById("registerForm");
+const next=()=>`customer-dashboard.html?business=${encodeURIComponent(business)}${service?"&service="+encodeURIComponent(service):""}`;
+
+function show(t,type=""){msg.textContent=t;msg.className="msg show "+type}
+if(business||service){context.style.display="block";context.textContent=service?"Please login/register to apply for this service.":"Please login as a customer to continue."}
+
+loginTab.onclick=()=>{loginTab.classList.add("active");registerTab.classList.remove("active");loginForm.classList.remove("hidden");registerForm.classList.add("hidden");show("")};
+registerTab.onclick=()=>{registerTab.classList.add("active");loginTab.classList.remove("active");registerForm.classList.remove("hidden");loginForm.classList.add("hidden");show("")};
+
+async function routeUser(uid){
+ const snap=await getDoc(doc(db,"users",uid));
+ if(!snap.exists())throw new Error("profile-missing");
+ const role=snap.data().role;
+ if(role!=="customer"){location.href="dashboard.html";return}
+ location.href=next();
+}
+
+loginForm.onsubmit=async e=>{
+ e.preventDefault();show("Signing in...","ok");
+ try{const c=await signInWithEmailAndPassword(auth,loginForm.loginEmail.value.trim(),loginForm.loginPassword.value);await routeUser(c.user.uid)}
+ catch(err){console.error(err);show(err.code==="auth/invalid-credential"?"Incorrect email or password.":err.code==="auth/invalid-email"?"Invalid email address.":"Login failed. Please try again.","err")}
+};
+
+registerForm.onsubmit=async e=>{
+ e.preventDefault();show("Creating account...","ok");
+ const name=regName.value.trim(),mobile=regMobile.value.replace(/\D/g,""),email=regEmail.value.trim(),password=regPassword.value;
+ if(mobile.length!==10){show("Enter a valid 10-digit mobile number.","err");return}
+ try{
+  const c=await createUserWithEmailAndPassword(auth,email,password);
+  await setDoc(doc(db,"users",c.user.uid),{uid:c.user.uid,role:"customer",name,mobile,email,status:"active",createdAt:serverTimestamp()});
+  location.href=next();
+ }catch(err){console.error(err);show(err.code==="auth/email-already-in-use"?"Email already registered.":err.code==="auth/weak-password"?"Password must be at least 6 characters.":"Registration failed. Please try again.","err")}
+};
+</script>
+</body>
+</html>
