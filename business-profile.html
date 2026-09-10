@@ -23,11 +23,6 @@ button,input,textarea,select{
   font:inherit;
 }
 
-.layout{
-  min-height:100vh;
-}
-
-/* SIDEBAR */
 .sidebar{
   width:250px;
   background:#0f4c81;
@@ -36,8 +31,6 @@ button,input,textarea,select{
   inset:0 auto 0 0;
   padding:22px 15px;
   z-index:100;
-  overflow-y:auto;
-  transition:.25s;
 }
 
 .brand{
@@ -58,7 +51,6 @@ button,input,textarea,select{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:20px;
   font-weight:800;
 }
 
@@ -69,7 +61,6 @@ button,input,textarea,select{
 .menu-title{
   font-size:11px;
   text-transform:uppercase;
-  letter-spacing:1px;
   opacity:.65;
   padding:0 12px 10px;
 }
@@ -108,7 +99,6 @@ button,input,textarea,select{
   padding-top:18px!important;
 }
 
-/* MAIN */
 .main{
   margin-left:250px;
   min-height:100vh;
@@ -184,7 +174,6 @@ button,input,textarea,select{
   font-weight:800;
 }
 
-/* CONTENT */
 .content{
   padding:30px;
   max-width:1250px;
@@ -205,14 +194,12 @@ button,input,textarea,select{
   font-size:13px;
 }
 
-/* MESSAGE */
 .message{
   display:none;
   padding:13px 15px;
   border-radius:9px;
   margin-bottom:18px;
   font-size:13px;
-  line-height:1.5;
 }
 
 .message.show{
@@ -231,7 +218,52 @@ button,input,textarea,select{
   border:1px solid #f1c0c0;
 }
 
-/* PROFILE HEADER */
+/* PUBLIC LINK */
+
+.public-link{
+  display:none;
+  background:#eef8ff;
+  border:1px solid #b9def5;
+  border-radius:13px;
+  padding:18px;
+  margin-bottom:20px;
+}
+
+.public-link.show{
+  display:block;
+}
+
+.public-link h3{
+  font-size:15px;
+  margin-bottom:6px;
+}
+
+.public-link p{
+  font-size:11px;
+  color:#667085;
+  margin-bottom:10px;
+}
+
+.link-row{
+  display:flex;
+  gap:8px;
+}
+
+.link-row input{
+  flex:1;
+  background:#fff;
+}
+
+.copy-btn{
+  border:0;
+  background:#1769aa;
+  color:#fff;
+  border-radius:9px;
+  padding:0 18px;
+  cursor:pointer;
+  font-weight:700;
+}
+
 .profile-header{
   background:linear-gradient(135deg,#0f4c81,#1769aa);
   color:#fff;
@@ -292,7 +324,6 @@ button,input,textarea,select{
   background:#8ee3a7;
 }
 
-/* FORM CARD */
 .form-card{
   background:#fff;
   border:1px solid #e5eaf1;
@@ -357,7 +388,6 @@ select{
   padding:12px 13px;
   outline:none;
   font-size:13px;
-  transition:.2s;
 }
 
 input:focus,
@@ -383,14 +413,36 @@ textarea{
   color:#8a94a6;
 }
 
+/* LOGO UPLOAD */
+
+.upload-box{
+  border:2px dashed #cbd8e6;
+  border-radius:12px;
+  padding:18px;
+  background:#fafcff;
+}
+
+.upload-box input{
+  border:0;
+  padding:5px 0;
+  background:transparent;
+}
+
+.upload-name{
+  font-size:11px;
+  color:#667085;
+  margin-top:7px;
+}
+
 /* SOCIAL */
-.social-icon{
+
+.social{
   display:flex;
   align-items:center;
   gap:9px;
 }
 
-.social-icon span{
+.social span{
   width:34px;
   height:34px;
   border-radius:8px;
@@ -399,16 +451,13 @@ textarea{
   display:flex;
   align-items:center;
   justify-content:center;
-  flex-shrink:0;
-  font-size:14px;
+  font-size:11px;
   font-weight:700;
-}
-
-.social-icon input{
-  flex:1;
+  flex-shrink:0;
 }
 
 /* BUTTONS */
+
 .actions{
   display:flex;
   justify-content:flex-end;
@@ -424,7 +473,6 @@ textarea{
   font-size:13px;
   font-weight:700;
   cursor:pointer;
-  transition:.2s;
 }
 
 .btn-primary{
@@ -432,17 +480,9 @@ textarea{
   color:#fff;
 }
 
-.btn-primary:hover{
-  background:#0b3d69;
-}
-
 .btn-secondary{
   background:#edf2f7;
   color:#344054;
-}
-
-.btn-secondary:hover{
-  background:#e2e8f0;
 }
 
 .btn:disabled{
@@ -451,6 +491,7 @@ textarea{
 }
 
 /* LOADING */
+
 .loading-screen{
   position:fixed;
   inset:0;
@@ -486,6 +527,7 @@ textarea{
 }
 
 /* MOBILE */
+
 @media(max-width:900px){
 
   .form-grid{
@@ -502,6 +544,7 @@ textarea{
 
   .sidebar{
     transform:translateX(-100%);
+    transition:.25s;
   }
 
   .sidebar.open{
@@ -510,7 +553,6 @@ textarea{
 
   .main{
     margin-left:0;
-    width:100%;
   }
 
   .mobile-menu{
@@ -536,12 +578,6 @@ textarea{
   .business-logo-preview{
     width:65px;
     height:65px;
-    border-radius:12px;
-    font-size:24px;
-  }
-
-  .profile-header h3{
-    font-size:18px;
   }
 
   .actions{
@@ -560,21 +596,12 @@ textarea{
     z-index:90;
   }
 
-}
-
-@media(max-width:480px){
-
-  .page-heading h2{
-    font-size:21px;
+  .link-row{
+    flex-direction:column;
   }
 
-  .form-body{
-    padding:18px;
-  }
-
-  .card-header,
-  .actions{
-    padding:18px;
+  .copy-btn{
+    height:44px;
   }
 
 }
@@ -583,19 +610,13 @@ textarea{
 
 <body>
 
-<!-- LOADING -->
 <div class="loading-screen" id="loadingScreen">
   <div class="loading-logo">B</div>
-  <div class="loading-text">
-    Loading business profile...
-  </div>
+  <div class="loading-text">Loading business profile...</div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
-<div class="layout">
-
-<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
 
   <div class="brand">
@@ -603,9 +624,7 @@ textarea{
     <div>Biz<strong>Saarthi</strong> 360</div>
   </div>
 
-  <div class="menu-title">
-    Workspace
-  </div>
+  <div class="menu-title">Workspace</div>
 
   <nav class="menu">
 
@@ -613,7 +632,7 @@ textarea{
       <span>⌂</span>Dashboard
     </button>
 
-    <button class="active" onclick="goTo('business-profile.html')">
+    <button class="active">
       <span>◉</span>Business Profile
     </button>
 
@@ -649,17 +668,13 @@ textarea{
 
 </aside>
 
-<!-- MAIN -->
 <main class="main">
 
 <header class="topbar">
 
   <div class="topbar-left">
 
-    <button
-      class="mobile-menu"
-      id="mobileMenu"
-      aria-label="Menu">
+    <button class="mobile-menu" id="mobileMenu">
       ☰
     </button>
 
@@ -695,13 +710,42 @@ textarea{
   <div class="page-heading">
     <h2>Business Profile</h2>
     <p>
-      Keep your business details updated for customers and services.
+      Manage your business information and public business page.
     </p>
   </div>
 
   <div class="message" id="message"></div>
 
+  <!-- PUBLIC LINK -->
+
+  <div class="public-link" id="publicLink">
+
+    <h3>🌐 Your Public Business Website</h3>
+
+    <p>
+      Share this link with your customers.
+    </p>
+
+    <div class="link-row">
+
+      <input
+        type="text"
+        id="publicUrl"
+        readonly>
+
+      <button
+        type="button"
+        class="copy-btn"
+        id="copyBtn">
+        Copy Link
+      </button>
+
+    </div>
+
+  </div>
+
   <!-- PROFILE PREVIEW -->
+
   <div class="profile-header">
 
     <div
@@ -717,7 +761,7 @@ textarea{
       </h3>
 
       <p>
-        Your public business profile information will be managed from here.
+        Your public business profile will show your business information and services.
       </p>
 
       <div class="profile-status">
@@ -729,17 +773,20 @@ textarea{
 
   </div>
 
-  <!-- IMPORTANT: FORM -->
   <form id="businessForm" novalidate>
 
-    <!-- BASIC INFORMATION -->
+    <!-- BASIC -->
+
     <div class="form-card">
 
       <div class="card-header">
+
         <h3>Basic Business Information</h3>
+
         <p>
-          Enter the main information of your business.
+          Enter your main business information.
         </p>
+
       </div>
 
       <div class="form-body">
@@ -748,98 +795,105 @@ textarea{
 
           <div class="form-group">
 
-            <label for="businessName">
+            <label>
               Business Name
               <span class="required">*</span>
             </label>
 
             <input
               id="businessName"
-              type="text"
-              maxlength="100"
               required
+              maxlength="100"
               placeholder="Enter business name">
 
           </div>
 
           <div class="form-group">
 
-            <label for="ownerName">
+            <label>
               Owner Name
               <span class="required">*</span>
             </label>
 
             <input
               id="ownerName"
-              type="text"
-              maxlength="80"
               required
+              maxlength="80"
               placeholder="Enter owner name">
 
           </div>
 
           <div class="form-group">
 
-            <label for="mobile">
+            <label>
               Mobile Number
               <span class="required">*</span>
             </label>
 
             <input
               id="mobile"
-              type="tel"
+              required
               inputmode="numeric"
               maxlength="10"
-              required
               placeholder="10 digit mobile number">
 
             <span class="input-help">
-              Mobile number is used for contact only. No OTP.
+              Contact only. No OTP.
             </span>
 
           </div>
 
           <div class="form-group">
 
-            <label for="email">
-              Email
-            </label>
+            <label>Email</label>
 
             <input
               id="email"
               type="email"
-              readonly
-              placeholder="Account email">
+              readonly>
 
           </div>
 
+          <!-- LOGO UPLOAD -->
+
           <div class="form-group full">
 
-            <label for="logoUrl">
-              Business Logo URL
+            <label>
+              Business Logo
+              <span class="required">*</span>
             </label>
 
-            <input
-              id="logoUrl"
-              type="url"
-              placeholder="https://example.com/logo.png">
+            <div class="upload-box">
+
+              <input
+                id="logoFile"
+                type="file"
+                accept="image/png,image/jpeg,image/webp">
+
+              <div
+                class="upload-name"
+                id="uploadName">
+                Choose PNG, JPG or WEBP logo
+              </div>
+
+            </div>
 
             <span class="input-help">
-              Firebase Storage is not required. Use a public image URL.
+              Upload your business logo. Maximum 5 MB.
             </span>
 
           </div>
 
           <div class="form-group full">
 
-            <label for="description">
+            <label>
               Business Description
             </label>
 
             <textarea
               id="description"
               maxlength="1000"
-              placeholder="Describe your business, services and experience..."></textarea>
+              placeholder="Describe your business..."></textarea>
 
           </div>
 
@@ -850,13 +904,17 @@ textarea{
     </div>
 
     <!-- ADDRESS -->
+
     <div class="form-card">
 
       <div class="card-header">
+
         <h3>Business Address</h3>
+
         <p>
-          Provide your office or business location details.
+          Provide your office or business location.
         </p>
+
       </div>
 
       <div class="form-body">
@@ -865,7 +923,7 @@ textarea{
 
           <div class="form-group full">
 
-            <label for="officeAddress">
+            <label>
               Office Address
               <span class="required">*</span>
             </label>
@@ -873,20 +931,19 @@ textarea{
             <textarea
               id="officeAddress"
               required
-              placeholder="House/Shop/Office address"></textarea>
+              placeholder="House / Shop / Office address"></textarea>
 
           </div>
 
           <div class="form-group">
 
-            <label for="city">
+            <label>
               City
               <span class="required">*</span>
             </label>
 
             <input
               id="city"
-              type="text"
               required
               placeholder="Enter city">
 
@@ -894,7 +951,7 @@ textarea{
 
           <div class="form-group">
 
-            <label for="state">
+            <label>
               State
               <span class="required">*</span>
             </label>
@@ -905,38 +962,27 @@ textarea{
                 Select State
               </option>
 
-              <option>Andhra Pradesh</option>
-              <option>Arunachal Pradesh</option>
-              <option>Assam</option>
               <option>Bihar</option>
-              <option>Chhattisgarh</option>
-              <option>Goa</option>
-              <option>Gujarat</option>
-              <option>Haryana</option>
-              <option>Himachal Pradesh</option>
               <option>Jharkhand</option>
-              <option>Karnataka</option>
-              <option>Kerala</option>
-              <option>Madhya Pradesh</option>
-              <option>Maharashtra</option>
-              <option>Manipur</option>
-              <option>Meghalaya</option>
-              <option>Mizoram</option>
-              <option>Nagaland</option>
-              <option>Odisha</option>
-              <option>Punjab</option>
-              <option>Rajasthan</option>
-              <option>Sikkim</option>
-              <option>Tamil Nadu</option>
-              <option>Telangana</option>
-              <option>Tripura</option>
               <option>Uttar Pradesh</option>
-              <option>Uttarakhand</option>
               <option>West Bengal</option>
               <option>Delhi</option>
-              <option>Jammu and Kashmir</option>
-              <option>Ladakh</option>
-              <option>Puducherry</option>
+              <option>Madhya Pradesh</option>
+              <option>Rajasthan</option>
+              <option>Maharashtra</option>
+              <option>Gujarat</option>
+              <option>Punjab</option>
+              <option>Haryana</option>
+              <option>Odisha</option>
+              <option>Karnataka</option>
+              <option>Tamil Nadu</option>
+              <option>Telangana</option>
+              <option>Kerala</option>
+              <option>Andhra Pradesh</option>
+              <option>Chhattisgarh</option>
+              <option>Uttarakhand</option>
+              <option>Himachal Pradesh</option>
+              <option>Other</option>
 
             </select>
 
@@ -944,17 +990,16 @@ textarea{
 
           <div class="form-group">
 
-            <label for="pinCode">
+            <label>
               PIN Code
               <span class="required">*</span>
             </label>
 
             <input
               id="pinCode"
-              type="text"
+              required
               inputmode="numeric"
               maxlength="6"
-              required
               placeholder="6 digit PIN">
 
           </div>
@@ -965,14 +1010,18 @@ textarea{
 
     </div>
 
-    <!-- ONLINE PRESENCE -->
+    <!-- ONLINE -->
+
     <div class="form-card">
 
       <div class="card-header">
+
         <h3>Online Presence</h3>
+
         <p>
-          Add your website and social/contact links.
+          Add website and social/contact links.
         </p>
+
       </div>
 
       <div class="form-body">
@@ -981,11 +1030,9 @@ textarea{
 
           <div class="form-group full">
 
-            <label>
-              Website
-            </label>
+            <label>Website</label>
 
-            <div class="social-icon">
+            <div class="social">
 
               <span>W</span>
 
@@ -1000,17 +1047,14 @@ textarea{
 
           <div class="form-group">
 
-            <label>
-              WhatsApp
-            </label>
+            <label>WhatsApp</label>
 
-            <div class="social-icon">
+            <div class="social">
 
               <span>WA</span>
 
               <input
                 id="whatsapp"
-                type="text"
                 placeholder="WhatsApp number or link">
 
             </div>
@@ -1019,18 +1063,16 @@ textarea{
 
           <div class="form-group">
 
-            <label>
-              Facebook
-            </label>
+            <label>Facebook</label>
 
-            <div class="social-icon">
+            <div class="social">
 
               <span>f</span>
 
               <input
                 id="facebook"
                 type="url"
-                placeholder="Facebook profile/page URL">
+                placeholder="Facebook page URL">
 
             </div>
 
@@ -1038,11 +1080,9 @@ textarea{
 
           <div class="form-group full">
 
-            <label>
-              Instagram
-            </label>
+            <label>Instagram</label>
 
-            <div class="social-icon">
+            <div class="social">
 
               <span>IG</span>
 
@@ -1059,7 +1099,6 @@ textarea{
 
       </div>
 
-      <!-- SAVE BUTTON -->
       <div class="actions">
 
         <button
@@ -1086,8 +1125,6 @@ textarea{
 
 </main>
 
-</div>
-
 <script type="module">
 
 import {
@@ -1113,342 +1150,372 @@ import {
 } from "./js/firebase-config.js";
 
 
-/* FIREBASE */
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
 const db = getFirestore(app);
 
-
-/* GLOBAL */
 let currentUser = null;
 
-let originalData = {};
+let savedData = {};
 
-
-/* SHORTCUT */
-const $ = id => document.getElementById(id);
+let selectedLogoData = null;
 
 
 /* ELEMENTS */
-const form = $("businessForm");
 
-const saveBtn = $("saveBtn");
+const loadingScreen =
+  document.getElementById("loadingScreen");
 
-const message = $("message");
+const form =
+  document.getElementById("businessForm");
 
-const loading = $("loadingScreen");
+const saveBtn =
+  document.getElementById("saveBtn");
 
-
-/* HIDE LOADING */
-function hideLoading(){
-
-  if(loading){
-    loading.style.display = "none";
-  }
-
-}
+const message =
+  document.getElementById("message");
 
 
 /* MESSAGE */
-function showMessage(text,type="success"){
+
+function showMessage(text,type){
 
   message.textContent = text;
 
   message.className =
-    `message show ${type}`;
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+    "message show " + type;
 
 }
 
 
-/* CLEAR MESSAGE */
-function clearMessage(){
+/* HIDE LOADING */
 
-  message.textContent = "";
+function hideLoading(){
 
-  message.className = "message";
+  loadingScreen.style.display = "none";
 
 }
 
 
 /* SET VALUE */
+
 function setValue(id,value){
 
-  $(id).value = value ?? "";
+  const element =
+    document.getElementById(id);
+
+  if(element){
+    element.value = value || "";
+  }
 
 }
 
 
-/* ERROR HANDLER */
-function getErrorMessage(error){
+/* CREATE SLUG */
 
-  console.error(
-    "Business Profile Error:",
-    error
-  );
+function createSlug(name){
 
-  if(error?.code === "permission-denied"){
-
-    return "Permission denied. Please make sure the latest Firestore Rules are published.";
-
-  }
-
-  if(error?.code === "unavailable"){
-
-    return "Firebase is temporarily unavailable. Please try again.";
-
-  }
-
-  if(error?.code === "unauthenticated"){
-
-    return "Your login session has expired. Please login again.";
-
-  }
-
-  return error?.message ||
-    "Something went wrong. Please try again.";
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g,"")
+    .replace(/\s+/g,"-")
+    .replace(/-+/g,"-")
+    .replace(/^-|-$/g,"")
+    .substring(0,70);
 
 }
 
 
-/* LOGO + BUSINESS PREVIEW */
-function renderPreview(){
+/* PUBLIC URL */
 
-  const name =
-    $("businessName").value.trim() ||
-    "Your Business";
+function generatePublicUrl(slug){
 
-  $("businessPreviewName").textContent =
-    name;
+  const base =
+    window.location.origin +
+    window.location.pathname
+      .replace("business-profile.html","");
+
+  return base +
+    "business.html?business=" +
+    encodeURIComponent(slug);
+
+}
+
+
+/* SHOW PUBLIC LINK */
+
+function showPublicLink(slug){
 
   const url =
-    $("logoUrl").value.trim();
+    generatePublicUrl(slug);
 
-  const box =
-    $("logoPreview");
+  document.getElementById("publicUrl").value =
+    url;
 
-  box.innerHTML = "";
+  document
+    .getElementById("publicLink")
+    .classList.add("show");
 
-  if(url){
+}
+
+
+/* PREVIEW */
+
+function updatePreview(){
+
+  const name =
+    document
+      .getElementById("businessName")
+      .value
+      .trim();
+
+  document
+    .getElementById("businessPreviewName")
+    .textContent =
+      name || "Your Business";
+
+  const logo =
+    document.getElementById("logoPreview");
+
+  logo.innerHTML = "";
+
+  if(selectedLogoData){
 
     const img =
       document.createElement("img");
 
-    img.src = url;
+    img.src = selectedLogoData;
 
-    img.alt = "Business Logo";
+    logo.appendChild(img);
 
-    img.onerror = () => {
+  }
+  else if(savedData.logoData){
 
-      box.textContent =
-        name.charAt(0).toUpperCase() ||
-        "B";
+    const img =
+      document.createElement("img");
 
-    };
+    img.src = savedData.logoData;
 
-    box.appendChild(img);
+    logo.appendChild(img);
 
-  }else{
+  }
+  else{
 
-    box.textContent =
-      name.charAt(0).toUpperCase() ||
-      "B";
+    logo.textContent =
+      (name || "B")
+      .charAt(0)
+      .toUpperCase();
 
   }
 
 }
+
+
+/* RESIZE LOGO */
+
+function resizeLogo(file){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        function(){
+
+          const image =
+            new Image();
+
+          image.onload =
+            function(){
+
+              const maxSize = 500;
+
+              const scale =
+                Math.min(
+                  1,
+                  maxSize /
+                  Math.max(
+                    image.width,
+                    image.height
+                  )
+                );
+
+              const canvas =
+                document.createElement("canvas");
+
+              canvas.width =
+                Math.round(
+                  image.width * scale
+                );
+
+              canvas.height =
+                Math.round(
+                  image.height * scale
+                );
+
+              const context =
+                canvas.getContext("2d");
+
+              context.drawImage(
+                image,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+              );
+
+              resolve(
+                canvas.toDataURL(
+                  "image/jpeg",
+                  0.75
+                )
+              );
+
+            };
+
+          image.onerror =
+            function(){
+
+              reject(
+                new Error(
+                  "Logo image could not be read."
+                )
+              );
+
+            };
+
+          image.src =
+            reader.result;
+
+        };
+
+      reader.onerror =
+        function(){
+
+          reject(
+            new Error(
+              "Logo file could not be read."
+            )
+          );
+
+        };
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+}
+
+
+/* LOGO SELECT */
+
+document
+  .getElementById("logoFile")
+  .addEventListener(
+    "change",
+    async function(){
+
+      const file =
+        this.files[0];
+
+      if(!file){
+        return;
+      }
+
+      if(file.size > 5 * 1024 * 1024){
+
+        showMessage(
+          "Logo file must be smaller than 5 MB.",
+          "error"
+        );
+
+        this.value = "";
+
+        return;
+
+      }
+
+      document
+        .getElementById("uploadName")
+        .textContent =
+          file.name;
+
+      try{
+
+        selectedLogoData =
+          await resizeLogo(file);
+
+        updatePreview();
+
+      }
+      catch(error){
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+      }
+
+    }
+  );
 
 
 /* LIVE PREVIEW */
-$("businessName")
-  .addEventListener(
-    "input",
-    renderPreview
-  );
 
-$("logoUrl")
+document
+  .getElementById("businessName")
   .addEventListener(
     "input",
-    renderPreview
+    updatePreview
   );
 
 
-/* MOBILE ONLY DIGITS */
-$("mobile")
+/* MOBILE ONLY */
+
+document
+  .getElementById("mobile")
   .addEventListener(
     "input",
-    event => {
+    function(){
 
-      event.target.value =
-        event.target.value
+      this.value =
+        this.value
           .replace(/\D/g,"")
-          .slice(0,10);
+          .substring(0,10);
 
     }
   );
 
 
-/* PIN ONLY DIGITS */
-$("pinCode")
+/* PIN ONLY */
+
+document
+  .getElementById("pinCode")
   .addEventListener(
     "input",
-    event => {
+    function(){
 
-      event.target.value =
-        event.target.value
+      this.value =
+        this.value
           .replace(/\D/g,"")
-          .slice(0,6);
+          .substring(0,6);
 
     }
   );
 
 
-/* LOAD BUSINESS PROFILE */
-async function loadProfile(user){
+/* LOAD PROFILE */
 
-  try{
-
-    const profileRef =
-      doc(
-        db,
-        "businesses",
-        user.uid
-      );
-
-    const snapshot =
-      await getDoc(profileRef);
-
-    const data =
-      snapshot.exists()
-        ? snapshot.data()
-        : {};
-
-    originalData = {
-      ...data
-    };
-
-
-    setValue(
-      "businessName",
-      data.businessName
-    );
-
-    setValue(
-      "ownerName",
-      data.ownerName
-    );
-
-    setValue(
-      "mobile",
-      data.mobile
-    );
-
-    setValue(
-      "email",
-      data.email || user.email
-    );
-
-    setValue(
-      "logoUrl",
-      data.logoUrl
-    );
-
-    setValue(
-      "description",
-      data.description
-    );
-
-    setValue(
-      "officeAddress",
-      data.officeAddress
-    );
-
-    setValue(
-      "city",
-      data.city
-    );
-
-    setValue(
-      "state",
-      data.state
-    );
-
-    setValue(
-      "pinCode",
-      data.pinCode
-    );
-
-    setValue(
-      "website",
-      data.website
-    );
-
-    setValue(
-      "whatsapp",
-      data.whatsapp
-    );
-
-    setValue(
-      "facebook",
-      data.facebook
-    );
-
-    setValue(
-      "instagram",
-      data.instagram
-    );
-
-
-    const displayName =
-      data.ownerName ||
-      user.displayName ||
-      user.email ||
-      "User";
-
-
-    $("topUserName")
-      .textContent =
-      displayName;
-
-
-    $("userAvatar")
-      .textContent =
-      displayName
-        .trim()
-        .charAt(0)
-        .toUpperCase();
-
-
-    renderPreview();
-
-  }
-  catch(error){
-
-    showMessage(
-      getErrorMessage(error),
-      "error"
-    );
-
-  }
-  finally{
-
-    hideLoading();
-
-  }
-
-}
-
-
-/* AUTH CHECK */
 onAuthStateChanged(
   auth,
-  async user => {
+  async function(user){
 
     if(!user){
 
@@ -1459,38 +1526,172 @@ onAuthStateChanged(
 
     }
 
-
     currentUser = user;
 
+    try{
 
-    $("email").value =
-      user.email || "";
+      const reference =
+        doc(
+          db,
+          "businesses",
+          user.uid
+        );
+
+      const snapshot =
+        await getDoc(reference);
+
+      if(snapshot.exists()){
+
+        savedData =
+          snapshot.data();
+
+      }
+      else{
+
+        savedData = {};
+
+      }
 
 
-    await loadProfile(user);
+      setValue(
+        "businessName",
+        savedData.businessName
+      );
+
+      setValue(
+        "ownerName",
+        savedData.ownerName
+      );
+
+      setValue(
+        "mobile",
+        savedData.mobile
+      );
+
+      setValue(
+        "email",
+        savedData.email ||
+        user.email
+      );
+
+      setValue(
+        "description",
+        savedData.description
+      );
+
+      setValue(
+        "officeAddress",
+        savedData.officeAddress
+      );
+
+      setValue(
+        "city",
+        savedData.city
+      );
+
+      setValue(
+        "state",
+        savedData.state
+      );
+
+      setValue(
+        "pinCode",
+        savedData.pinCode
+      );
+
+      setValue(
+        "website",
+        savedData.website
+      );
+
+      setValue(
+        "whatsapp",
+        savedData.whatsapp
+      );
+
+      setValue(
+        "facebook",
+        savedData.facebook
+      );
+
+      setValue(
+        "instagram",
+        savedData.instagram
+      );
+
+
+      document
+        .getElementById("topUserName")
+        .textContent =
+          savedData.ownerName ||
+          user.email ||
+          "User";
+
+
+      document
+        .getElementById("userAvatar")
+        .textContent =
+          (
+            savedData.ownerName ||
+            user.email ||
+            "U"
+          )
+          .charAt(0)
+          .toUpperCase();
+
+
+      document
+        .getElementById("uploadName")
+        .textContent =
+          savedData.logoName ||
+          "Choose PNG, JPG or WEBP logo";
+
+
+      updatePreview();
+
+
+      if(savedData.publicSlug){
+
+        showPublicLink(
+          savedData.publicSlug
+        );
+
+      }
+
+    }
+    catch(error){
+
+      console.error(error);
+
+      showMessage(
+        "Profile load failed: " +
+        error.message,
+        "error"
+      );
+
+    }
+    finally{
+
+      hideLoading();
+
+    }
 
   }
 );
 
 
-/* =========================
-   SAVE BUSINESS PROFILE
-========================= */
+/* SAVE PROFILE */
 
 form.addEventListener(
   "submit",
-  async event => {
+  async function(event){
 
     event.preventDefault();
 
-    clearMessage();
-
-
-    /* LOGIN CHECK */
     if(!currentUser){
 
       showMessage(
-        "Login session not ready. Please wait a moment and try again.",
+        "Login session is not ready. Please wait.",
         "error"
       );
 
@@ -1499,79 +1700,86 @@ form.addEventListener(
     }
 
 
-    /* GET VALUES */
     const businessName =
-      $("businessName")
+      document
+        .getElementById("businessName")
         .value
         .trim();
 
     const ownerName =
-      $("ownerName")
+      document
+        .getElementById("ownerName")
         .value
         .trim();
 
     const mobile =
-      $("mobile")
+      document
+        .getElementById("mobile")
         .value
         .trim();
 
     const email =
-      $("email")
-        .value
-        .trim();
-
-    const logoUrl =
-      $("logoUrl")
+      document
+        .getElementById("email")
         .value
         .trim();
 
     const description =
-      $("description")
+      document
+        .getElementById("description")
         .value
         .trim();
 
     const officeAddress =
-      $("officeAddress")
+      document
+        .getElementById("officeAddress")
         .value
         .trim();
 
     const city =
-      $("city")
+      document
+        .getElementById("city")
         .value
         .trim();
 
     const state =
-      $("state")
-        .value
-        .trim();
+      document
+        .getElementById("state")
+        .value;
 
     const pinCode =
-      $("pinCode")
+      document
+        .getElementById("pinCode")
         .value
         .trim();
 
     const website =
-      $("website")
+      document
+        .getElementById("website")
         .value
         .trim();
 
     const whatsapp =
-      $("whatsapp")
+      document
+        .getElementById("whatsapp")
         .value
         .trim();
 
     const facebook =
-      $("facebook")
+      document
+        .getElementById("facebook")
         .value
         .trim();
 
     const instagram =
-      $("instagram")
+      document
+        .getElementById("instagram")
         .value
         .trim();
 
 
-    /* REQUIRED VALIDATION */
+    /* VALIDATION */
+
     if(
       !businessName ||
       !ownerName ||
@@ -1592,7 +1800,6 @@ form.addEventListener(
     }
 
 
-    /* MOBILE VALIDATION */
     if(!/^\d{10}$/.test(mobile)){
 
       showMessage(
@@ -1600,14 +1807,11 @@ form.addEventListener(
         "error"
       );
 
-      $("mobile").focus();
-
       return;
 
     }
 
 
-    /* PIN VALIDATION */
     if(!/^\d{6}$/.test(pinCode)){
 
       showMessage(
@@ -1615,14 +1819,13 @@ form.addEventListener(
         "error"
       );
 
-      $("pinCode").focus();
-
       return;
 
     }
 
 
-    /* BUTTON LOADING */
+    /* SAVE BUTTON */
+
     saveBtn.disabled = true;
 
     saveBtn.textContent =
@@ -1631,8 +1834,7 @@ form.addEventListener(
 
     try{
 
-      /* DOCUMENT */
-      const businessRef =
+      const reference =
         doc(
           db,
           "businesses",
@@ -1640,14 +1842,36 @@ form.addEventListener(
         );
 
 
-      /* CHECK EXISTING */
-      const existing =
-        await getDoc(
-          businessRef
-        );
+      const oldSnapshot =
+        await getDoc(reference);
 
 
-      /* DATA */
+      /* PUBLIC SLUG */
+
+      let publicSlug =
+        savedData.publicSlug;
+
+
+      if(!publicSlug){
+
+        publicSlug =
+          createSlug(
+            businessName
+          );
+
+      }
+
+
+      if(!publicSlug){
+
+        publicSlug =
+          "business-" +
+          currentUser.uid
+            .substring(0,8);
+
+      }
+
+
       const businessData = {
 
         ownerId:
@@ -1655,9 +1879,6 @@ form.addEventListener(
 
         businessName:
           businessName,
-
-        logoUrl:
-          logoUrl,
 
         ownerName:
           ownerName,
@@ -1669,6 +1890,9 @@ form.addEventListener(
           email ||
           currentUser.email ||
           "",
+
+        description:
+          description,
 
         officeAddress:
           officeAddress,
@@ -1682,11 +1906,11 @@ form.addEventListener(
         pinCode:
           pinCode,
 
-        description:
-          description,
-
         website:
           website,
+
+        whatsapp:
+          whatsapp,
 
         facebook:
           facebook,
@@ -1694,8 +1918,8 @@ form.addEventListener(
         instagram:
           instagram,
 
-        whatsapp:
-          whatsapp,
+        publicSlug:
+          publicSlug,
 
         status:
           "active",
@@ -1706,8 +1930,36 @@ form.addEventListener(
       };
 
 
-      /* CREATED ONLY FIRST TIME */
-      if(!existing.exists()){
+      /* LOGO */
+
+      if(selectedLogoData){
+
+        businessData.logoData =
+          selectedLogoData;
+
+        businessData.logoName =
+          document
+            .getElementById("logoFile")
+            .files[0]
+            ?.name ||
+          "business-logo";
+
+      }
+      else if(savedData.logoData){
+
+        businessData.logoData =
+          savedData.logoData;
+
+        businessData.logoName =
+          savedData.logoName ||
+          "business-logo";
+
+      }
+
+
+      /* CREATED TIME ONLY FIRST SAVE */
+
+      if(!oldSnapshot.exists()){
 
         businessData.createdAt =
           serverTimestamp();
@@ -1716,8 +1968,9 @@ form.addEventListener(
 
 
       /* FIRESTORE SAVE */
+
       await setDoc(
-        businessRef,
+        reference,
         businessData,
         {
           merge:true
@@ -1726,41 +1979,68 @@ form.addEventListener(
 
 
       /* UPDATE LOCAL DATA */
-      originalData = {
-        ...originalData,
+
+      savedData = {
+        ...savedData,
         ...businessData
       };
 
 
-      /* HEADER UPDATE */
-      $("topUserName")
+      selectedLogoData = null;
+
+      document
+        .getElementById("logoFile")
+        .value = "";
+
+
+      document
+        .getElementById("uploadName")
         .textContent =
-        ownerName;
+          savedData.logoName ||
+          "Choose PNG, JPG or WEBP logo";
 
 
-      $("userAvatar")
-        .textContent =
-        ownerName
-          .charAt(0)
-          .toUpperCase();
+      showPublicLink(
+        publicSlug
+      );
 
 
-      renderPreview();
+      updatePreview();
 
 
-      /* SUCCESS */
       showMessage(
-        "Business profile saved successfully. ✓",
+        "Business Profile Saved Successfully! Public Website Link Generated. ✓",
         "success"
       );
 
     }
     catch(error){
 
-      showMessage(
-        getErrorMessage(error),
-        "error"
+      console.error(
+        "SAVE ERROR:",
+        error
       );
+
+      if(
+        error.code ===
+        "permission-denied"
+      ){
+
+        showMessage(
+          "Permission denied. Please check Firestore Rules.",
+          "error"
+        );
+
+      }
+      else{
+
+        showMessage(
+          "Save failed: " +
+          error.message,
+          "error"
+        );
+
+      }
 
     }
     finally{
@@ -1776,115 +2056,39 @@ form.addEventListener(
 );
 
 
-/* CANCEL */
-$("cancelBtn")
+/* COPY PUBLIC LINK */
+
+document
+  .getElementById("copyBtn")
   .addEventListener(
     "click",
-    () => {
+    async function(){
 
-      setValue(
-        "businessName",
-        originalData.businessName
-      );
-
-      setValue(
-        "ownerName",
-        originalData.ownerName
-      );
-
-      setValue(
-        "mobile",
-        originalData.mobile
-      );
-
-      setValue(
-        "email",
-        originalData.email ||
-        currentUser?.email
-      );
-
-      setValue(
-        "logoUrl",
-        originalData.logoUrl
-      );
-
-      setValue(
-        "description",
-        originalData.description
-      );
-
-      setValue(
-        "officeAddress",
-        originalData.officeAddress
-      );
-
-      setValue(
-        "city",
-        originalData.city
-      );
-
-      setValue(
-        "state",
-        originalData.state
-      );
-
-      setValue(
-        "pinCode",
-        originalData.pinCode
-      );
-
-      setValue(
-        "website",
-        originalData.website
-      );
-
-      setValue(
-        "whatsapp",
-        originalData.whatsapp
-      );
-
-      setValue(
-        "facebook",
-        originalData.facebook
-      );
-
-      setValue(
-        "instagram",
-        originalData.instagram
-      );
-
-
-      renderPreview();
-
-      clearMessage();
-
-      window.scrollTo({
-        top:0,
-        behavior:"smooth"
-      });
-
-    }
-  );
-
-
-/* LOGOUT */
-$("logoutBtn")
-  .addEventListener(
-    "click",
-    async () => {
+      const url =
+        document
+          .getElementById("publicUrl")
+          .value;
 
       try{
 
-        await signOut(auth);
+        await navigator.clipboard.writeText(
+          url
+        );
 
-        window.location.href =
-          "index.html";
+        showMessage(
+          "Public website link copied successfully. ✓",
+          "success"
+        );
 
       }
       catch(error){
 
+        document
+          .getElementById("publicUrl")
+          .select();
+
         showMessage(
-          "Logout failed. Please try again.",
+          "Please copy the link manually.",
           "error"
         );
 
@@ -1894,9 +2098,112 @@ $("logoutBtn")
   );
 
 
+/* CANCEL */
+
+document
+  .getElementById("cancelBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      setValue(
+        "businessName",
+        savedData.businessName
+      );
+
+      setValue(
+        "ownerName",
+        savedData.ownerName
+      );
+
+      setValue(
+        "mobile",
+        savedData.mobile
+      );
+
+      setValue(
+        "description",
+        savedData.description
+      );
+
+      setValue(
+        "officeAddress",
+        savedData.officeAddress
+      );
+
+      setValue(
+        "city",
+        savedData.city
+      );
+
+      setValue(
+        "state",
+        savedData.state
+      );
+
+      setValue(
+        "pinCode",
+        savedData.pinCode
+      );
+
+      setValue(
+        "website",
+        savedData.website
+      );
+
+      setValue(
+        "whatsapp",
+        savedData.whatsapp
+      );
+
+      setValue(
+        "facebook",
+        savedData.facebook
+      );
+
+      setValue(
+        "instagram",
+        savedData.instagram
+      );
+
+      selectedLogoData = null;
+
+      document
+        .getElementById("logoFile")
+        .value = "";
+
+      updatePreview();
+
+      showMessage(
+        "Changes cancelled.",
+        "success"
+      );
+
+    }
+  );
+
+
+/* LOGOUT */
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener(
+    "click",
+    async function(){
+
+      await signOut(auth);
+
+      window.location.href =
+        "index.html";
+
+    }
+  );
+
+
 /* NAVIGATION */
+
 window.goTo =
-  page => {
+  function(page){
 
     window.location.href =
       page;
@@ -1905,59 +2212,54 @@ window.goTo =
 
 
 window.comingSoon =
-  name => {
+  function(name){
 
     alert(
-      `${name} section is coming soon.`
+      name +
+      " section is coming soon."
     );
 
   };
 
 
 /* MOBILE MENU */
-const sidebar =
-  $("sidebar");
 
-const overlay =
-  $("overlay");
+document
+  .getElementById("mobileMenu")
+  .addEventListener(
+    "click",
+    function(){
 
-const mobileMenu =
-  $("mobileMenu");
+      document
+        .getElementById("sidebar")
+        .classList
+        .toggle("open");
 
+      document
+        .getElementById("overlay")
+        .classList
+        .toggle("active");
 
-function closeMenu(){
-
-  sidebar.classList.remove(
-    "open"
+    }
   );
 
-  overlay.classList.remove(
-    "active"
+
+document
+  .getElementById("overlay")
+  .addEventListener(
+    "click",
+    function(){
+
+      document
+        .getElementById("sidebar")
+        .classList
+        .remove("open");
+
+      this.classList
+        .remove("active");
+
+    }
   );
-
-}
-
-
-mobileMenu.addEventListener(
-  "click",
-  () => {
-
-    sidebar.classList.toggle(
-      "open"
-    );
-
-    overlay.classList.toggle(
-      "active"
-    );
-
-  }
-);
-
-
-overlay.addEventListener(
-  "click",
-  closeMenu
-);
 
 </script>
 
