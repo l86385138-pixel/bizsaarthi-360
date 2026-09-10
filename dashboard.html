@@ -29,7 +29,7 @@
     }
 
     /* =========================
-       LAYOUT
+       MAIN LAYOUT
     ========================= */
 
     .dashboard {
@@ -77,6 +77,7 @@
       justify-content: center;
       font-size: 20px;
       font-weight: 800;
+      flex-shrink: 0;
     }
 
 
@@ -163,6 +164,13 @@
     }
 
 
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+
     .page-title h1 {
       font-size: 21px;
       margin-bottom: 3px;
@@ -210,6 +218,7 @@
       align-items: center;
       justify-content: center;
       font-weight: 800;
+      font-size: 15px;
     }
 
 
@@ -222,6 +231,10 @@
     }
 
 
+    /* =========================
+       WELCOME
+    ========================= */
+
     .welcome-card {
       background:
         linear-gradient(
@@ -231,8 +244,10 @@
         );
       color: white;
       border-radius: 16px;
-      padding: 26px;
+      padding: 28px;
       margin-bottom: 25px;
+      box-shadow:
+        0 10px 30px rgba(15,76,129,.12);
     }
 
 
@@ -246,11 +261,12 @@
       font-size: 14px;
       opacity: .9;
       line-height: 1.6;
+      max-width: 700px;
     }
 
 
     /* =========================
-       STAT CARDS
+       STATS
     ========================= */
 
     .stats {
@@ -267,6 +283,29 @@
       border: 1px solid #e5eaf1;
       border-radius: 14px;
       padding: 20px;
+      min-height: 125px;
+      transition: .2s;
+    }
+
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 8px 25px rgba(20,40,70,.06);
+    }
+
+
+    .stat-icon {
+      float: right;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #edf6ff;
+      color: #0f4c81;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
     }
 
 
@@ -278,28 +317,14 @@
 
 
     .stat-value {
-      font-size: 26px;
+      font-size: 27px;
       font-weight: 800;
       color: #172033;
     }
 
 
-    .stat-icon {
-      float: right;
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: #edf6ff;
-      color: #0f4c81;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-
-
     /* =========================
-       DASHBOARD GRID
+       GRID
     ========================= */
 
     .dashboard-grid {
@@ -357,12 +382,14 @@
       cursor: pointer;
       text-align: left;
       transition: .2s;
+      color: #172033;
     }
 
 
     .quick-action:hover {
       border-color: #8bbde5;
       transform: translateY(-2px);
+      background: white;
     }
 
 
@@ -446,11 +473,49 @@
       font-size: 22px;
       cursor: pointer;
       color: #172033;
+      padding: 5px;
     }
 
 
     .overlay {
       display: none;
+    }
+
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading {
+      position: fixed;
+      inset: 0;
+      background: white;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+
+    .loading-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #0f4c81;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+
+    .loading-text {
+      color: #718096;
+      font-size: 13px;
     }
 
 
@@ -509,7 +574,7 @@
 
 
       .welcome-card {
-        padding: 20px;
+        padding: 21px;
       }
 
 
@@ -555,6 +620,16 @@
         padding: 17px;
       }
 
+
+      .page-title h1 {
+        font-size: 18px;
+      }
+
+
+      .page-title p {
+        display: none;
+      }
+
     }
 
   </style>
@@ -563,6 +638,25 @@
 
 
 <body>
+
+
+<!-- =========================
+     LOADING SCREEN
+========================= -->
+
+<div
+  class="loading"
+  id="loadingScreen">
+
+  <div class="loading-logo">
+    B
+  </div>
+
+  <div class="loading-text">
+    Loading your dashboard...
+  </div>
+
+</div>
 
 
 <div class="dashboard">
@@ -575,6 +669,7 @@
   <aside
     class="sidebar"
     id="sidebar">
+
 
     <div class="brand">
 
@@ -595,6 +690,7 @@
 
 
     <nav class="menu">
+
 
       <button
         class="active"
@@ -672,6 +768,7 @@
 
       </button>
 
+
     </nav>
 
   </aside>
@@ -690,16 +787,15 @@
   <main class="main">
 
 
-    <!-- TOPBAR -->
+    <!-- =========================
+         TOPBAR
+    ========================== -->
 
     <header class="topbar">
 
-      <div
-        style="
-          display:flex;
-          align-items:center;
-          gap:14px;
-        ">
+
+      <div class="topbar-left">
+
 
         <button
           class="mobile-menu"
@@ -723,10 +819,12 @@
 
         </div>
 
+
       </div>
 
 
       <div class="user-area">
+
 
         <div class="user-info">
 
@@ -734,12 +832,15 @@
             class="user-name"
             id="userName">
 
-            Business Owner
+            User
 
           </div>
 
-          <div class="user-role">
-            Business Owner
+          <div
+            class="user-role">
+
+            Customer
+
           </div>
 
         </div>
@@ -749,16 +850,20 @@
           class="user-avatar"
           id="userAvatar">
 
-          BO
+          U
 
         </div>
 
+
       </div>
+
 
     </header>
 
 
-    <!-- CONTENT -->
+    <!-- =========================
+         CONTENT
+    ========================== -->
 
     <section class="content">
 
@@ -768,7 +873,7 @@
       <div class="welcome-card">
 
         <h2>
-          Welcome to BizSaarthi 360 👋
+          Welcome 👋
         </h2>
 
         <p>
@@ -780,7 +885,9 @@
       </div>
 
 
-      <!-- STATS -->
+      <!-- =========================
+           STATS
+      ========================== -->
 
       <div class="stats">
 
@@ -795,8 +902,12 @@
             Business Profile
           </div>
 
-          <div class="stat-value">
+          <div
+            class="stat-value"
+            id="profileProgress">
+
             0%
+
           </div>
 
         </div>
@@ -868,7 +979,9 @@
       </div>
 
 
-      <!-- LOWER GRID -->
+      <!-- =========================
+           LOWER GRID
+      ========================== -->
 
       <div class="dashboard-grid">
 
@@ -876,6 +989,7 @@
         <!-- QUICK ACTIONS -->
 
         <div class="card">
+
 
           <div class="card-header">
 
@@ -897,19 +1011,23 @@
               class="quick-action"
               type="button">
 
+
               <div class="quick-action-icon">
                 🏢
               </div>
 
+
               <div class="quick-action-title">
                 Complete Business Profile
               </div>
+
 
               <div class="quick-action-text">
                 Add your business name, address,
                 contact details and description.
               </div>
 
+
             </button>
 
 
@@ -917,19 +1035,23 @@
               class="quick-action"
               type="button">
 
+
               <div class="quick-action-icon">
                 ➕
               </div>
 
+
               <div class="quick-action-title">
                 Add New Service
               </div>
+
 
               <div class="quick-action-text">
                 Add services with price,
                 description and required documents.
               </div>
 
+
             </button>
 
 
@@ -937,19 +1059,23 @@
               class="quick-action"
               type="button">
 
+
               <div class="quick-action-icon">
                 👥
               </div>
 
+
               <div class="quick-action-title">
                 View Customers
               </div>
+
 
               <div class="quick-action-text">
                 Manage customers and view
                 their service applications.
               </div>
 
+
             </button>
 
 
@@ -957,30 +1083,38 @@
               class="quick-action"
               type="button">
 
+
               <div class="quick-action-icon">
                 📊
               </div>
 
+
               <div class="quick-action-title">
                 View Reports
               </div>
+
 
               <div class="quick-action-text">
                 Track applications, customers
                 and business activity.
               </div>
 
+
             </button>
 
 
           </div>
 
+
         </div>
 
 
-        <!-- ACTIVITY -->
+        <!-- =========================
+             RECENT ACTIVITY
+        ========================== -->
 
         <div class="card">
+
 
           <div class="card-header">
 
@@ -1011,7 +1145,7 @@
                 </div>
 
                 <div class="activity-time">
-                  Just now
+                  Account
                 </div>
 
               </div>
@@ -1063,6 +1197,7 @@
 
           </div>
 
+
         </div>
 
 
@@ -1071,102 +1206,20 @@
 
     </section>
 
+
   </main>
+
 
 </div>
 
 
-<script>
+<!-- =========================
+     FIREBASE DASHBOARD JS
+========================= -->
 
-  /* =========================
-     MOBILE SIDEBAR
-  ========================== */
-
-  const mobileMenu =
-    document.getElementById("mobileMenu");
-
-  const sidebar =
-    document.getElementById("sidebar");
-
-  const overlay =
-    document.getElementById("overlay");
-
-
-  mobileMenu.addEventListener(
-    "click",
-    () => {
-
-      sidebar.classList.add("open");
-      overlay.classList.add("active");
-
-    }
-  );
-
-
-  overlay.addEventListener(
-    "click",
-    () => {
-
-      sidebar.classList.remove("open");
-      overlay.classList.remove("active");
-
-    }
-  );
-
-
-  /* =========================
-     SIDEBAR ACTIVE MENU
-  ========================== */
-
-  const menuButtons =
-    document.querySelectorAll(
-      ".menu button:not(.logout-btn)"
-    );
-
-
-  menuButtons.forEach(
-    button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          menuButtons.forEach(
-            item =>
-              item.classList.remove("active")
-          );
-
-          button.classList.add("active");
-
-          sidebar.classList.remove("open");
-          overlay.classList.remove("active");
-
-        }
-      );
-
-    }
-  );
-
-
-  /* =========================
-     TEMP LOGOUT
-     Firebase logout will be
-     connected later.
-  ========================== */
-
-  document
-    .getElementById("logoutBtn")
-    .addEventListener(
-      "click",
-      () => {
-
-        window.location.href =
-          "index.html";
-
-      }
-    );
-
-
+<script
+  type="module"
+  src="js/dashboard.js">
 </script>
 
 
