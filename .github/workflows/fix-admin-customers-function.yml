@@ -1,0 +1,38 @@
+name: Fix Admin Customers Function
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-admin-customers-function.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch admin.html
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('admin.html')
+          s=p.read_text(encoding='utf-8')
+          old='let owners=D.users.filter(x=>["owner","business_owner"].includes(status(x.role))),customers=D.users.filter(x=>status(x.role)==="customer"),active=D.users.filter(x=>status(x.status)==="active");'
+          new='let owners=D.users.filter(x=>["owner","business_owner"].includes(status(x.role))),customerUsers=D.users.filter(x=>status(x.role)==="customer"),active=D.users.filter(x=>status(x.status)==="active");'
+          if old not in s:
+              raise SystemExit('Target line not found')
+          s=s.replace(old,new)
+          s=s.replace('$("nCustomers").textContent=customers.length','$("nCustomers").textContent=customerUsers.length')
+          s=s.replace('<b>${customers.length}</b> customers','<b>${customerUsers.length}</b> customers')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit fix
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Fix admin customers function collision'
+          git push
