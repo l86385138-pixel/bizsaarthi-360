@@ -2,19 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Customer Dashboard | BizSaarthi 360</title>
+<title>Customer Dashboard</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}.top{height:70px;background:#fff;border-bottom:1px solid #e5eaf1;display:flex;align-items:center;justify-content:space-between;padding:0 28px}.brand{font-size:20px;font-weight:800;color:#0f4c81}.brand strong{color:#1769aa}.user{display:flex;gap:10px;align-items:center}.avatar{width:40px;height:40px;border-radius:50%;background:#e8f3fb;color:#0f4c81;display:grid;place-items:center;font-weight:800}.wrap{max-width:1100px;margin:auto;padding:25px}.hero{background:linear-gradient(135deg,#0f4c81,#1769aa);color:#fff;border-radius:16px;padding:25px;margin-bottom:20px}.hero h1{margin:0 0 7px;font-size:25px}.hero p{margin:0;opacity:.9;font-size:13px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}.stat,.card{background:#fff;border:1px solid #e5eaf1;border-radius:14px;padding:20px}.stat b{font-size:28px}.stat span{display:block;color:#718096;font-size:12px;margin-top:7px}.card{margin-bottom:18px}.card h2{font-size:17px;margin:0 0 15px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}label{font-size:11px;font-weight:700;color:#344054;display:block;margin-bottom:6px}input,textarea,select{width:100%;padding:11px;border:1px solid #d9e0e8;border-radius:8px;font-size:13px}textarea{min-height:85px;resize:vertical}.btn{border:0;border-radius:8px;padding:11px 16px;background:#0f4c81;color:#fff;font-weight:700;cursor:pointer}.btn.light{background:#edf2f7;color:#344054}.msg{display:none;padding:11px;border-radius:8px;font-size:12px;margin-bottom:12px}.msg.show{display:block}.ok{background:#e9f8ef;color:#18794e}.err{background:#fff0f0;color:#c62828}.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{text-align:left;padding:11px;border-bottom:1px solid #edf0f4}.badge{display:inline-block;padding:5px 9px;border-radius:15px;background:#edf6ff;color:#0f4c81;font-weight:700;font-size:10px}.empty{text-align:center;padding:20px;color:#718096;border:1px dashed #cbd5e1;border-radius:9px}.actions{display:flex;gap:8px;flex-wrap:wrap}.notice{background:#fff8e6;border:1px solid #f1d48a;padding:10px;border-radius:9px;font-size:11px;color:#795c00;margin-top:10px}
-@media(max-width:700px){.top{padding:0 15px}.wrap{padding:15px}.grid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.user span{display:none}.table{display:block;overflow:auto;white-space:nowrap}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}.top{height:70px;background:#fff;border-bottom:1px solid #e5eaf1;display:flex;align-items:center;justify-content:space-between;padding:0 28px}.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;color:#0f4c81;min-width:0}.brand-logo{width:40px;height:40px;border-radius:9px;background:#e8f3fb;color:#0f4c81;display:grid;place-items:center;font-size:16px;font-weight:800;flex:0 0 40px;overflow:hidden}.brand-logo img{width:100%;height:100%;object-fit:cover;display:block}.brand-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}.user{display:flex;gap:10px;align-items:center}.avatar{width:40px;height:40px;border-radius:50%;background:#e8f3fb;color:#0f4c81;display:grid;place-items:center;font-weight:800}.wrap{max-width:1100px;margin:auto;padding:25px}.hero{background:linear-gradient(135deg,#0f4c81,#1769aa);color:#fff;border-radius:16px;padding:25px;margin-bottom:20px}.hero h1{margin:0 0 7px;font-size:25px}.hero p{margin:0;opacity:.9;font-size:13px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}.stat,.card{background:#fff;border:1px solid #e5eaf1;border-radius:14px;padding:20px}.stat b{font-size:28px}.stat span{display:block;color:#718096;font-size:12px;margin-top:7px}.card{margin-bottom:18px}.card h2{font-size:17px;margin:0 0 15px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}label{font-size:11px;font-weight:700;color:#344054;display:block;margin-bottom:6px}input,textarea,select{width:100%;padding:11px;border:1px solid #d9e0e8;border-radius:8px;font-size:13px}textarea{min-height:85px;resize:vertical}.btn{border:0;border-radius:8px;padding:11px 16px;background:#0f4c81;color:#fff;font-weight:700;cursor:pointer}.btn.light{background:#edf2f7;color:#344054}.msg{display:none;padding:11px;border-radius:8px;font-size:12px;margin-bottom:12px}.msg.show{display:block}.ok{background:#e9f8ef;color:#18794e}.err{background:#fff0f0;color:#c62828}.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{text-align:left;padding:11px;border-bottom:1px solid #edf0f4}.badge{display:inline-block;padding:5px 9px;border-radius:15px;background:#edf6ff;color:#0f4c81;font-weight:700;font-size:10px}.empty{text-align:center;padding:20px;color:#718096;border:1px dashed #cbd5e1;border-radius:9px}.actions{display:flex;gap:8px;flex-wrap:wrap}.notice{background:#fff8e6;border:1px solid #f1d48a;padding:10px;border-radius:9px;font-size:11px;color:#795c00;margin-top:10px}
+@media(max-width:700px){.top{padding:0 15px}.wrap{padding:15px}.grid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.user span{display:none}.table{display:block;overflow:auto;white-space:nowrap}.brand-name{max-width:190px}}
 </style>
 </head>
 <body>
-<header class="top"><div class="brand">BizSaarthi <strong>360</strong></div><div class="user"><span id="userName">Customer</span><div class="avatar" id="avatar">C</div><button class="btn light" id="logout">Logout</button></div></header>
+<header class="top"><div class="brand" id="businessBrand"><div class="brand-logo" id="businessLogo">B</div><div class="brand-name" id="businessBrandName">Business</div></div><div class="user"><span id="userName">Customer</span><div class="avatar" id="avatar">C</div><button class="btn light" id="logout">Logout</button></div></header>
 <main class="wrap">
 <div class="hero"><h1>Customer Dashboard</h1><p>Apply for services and track every application from one place.</p></div>
 <div id="msg" class="msg"></div>
 <div class="grid"><div class="stat"><b id="total">0</b><span>Total Applications</span></div><div class="stat"><b id="pending">0</b><span>Pending</span></div><div class="stat"><b id="approved">0</b><span>Approved</span></div></div>
-
 <div class="card" id="applyCard">
 <h2>Apply for Service</h2>
 <div id="serviceInfo" class="notice" style="display:none"></div>
@@ -27,15 +26,13 @@
 </form>
 <div class="notice">Document upload is not enabled because Firebase Storage is not available on the current Firebase plan. You can add document links/details in the application notes.</div>
 </div>
-
 <div class="card"><h2>My Applications</h2><div id="applications"><div class="empty">Loading applications...</div></div></div>
 <div class="card"><h2>My Profile</h2><form id="profileForm" class="formgrid"><div><label>Name</label><input id="profileName" required></div><div><label>Mobile</label><input id="profileMobile" required></div><div class="full"><label>Email</label><input id="profileEmail" type="email" readonly></div><div class="full"><button class="btn" type="submit">Save Profile</button></div></form></div>
 </main>
-
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-import{getFirestore,doc,getDoc,setDoc,collection,query,where,getDocs,addDoc,serverTimestamp,orderBy}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import{getFirestore,doc,getDoc,setDoc,collection,query,where,getDocs,addDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import{firebaseConfig}from"./js/firebase-config.js";
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),p=new URLSearchParams(location.search);
 const business=p.get("business")||"",serviceId=p.get("service")||"";
@@ -43,6 +40,40 @@ let uid="",currentService=null;
 const msg=document.getElementById("msg");
 function show(t,type="ok"){msg.textContent=t;msg.className="msg show "+type;setTimeout(()=>msg.className="msg",4500)}
 function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+async function loadBusinessBrand(){
+  try{
+    let b=null;
+    if(business){
+      const snap=await getDocs(query(collection(db,"businesses"),where("publicSlug","==",business)));
+      if(!snap.empty) b={id:snap.docs[0].id,...snap.docs[0].data()};
+    }
+    if(!b){
+      const snap=await getDocs(query(collection(db,"applications"),where("customerId","==",uid)));
+      const rows=[];
+      snap.forEach(x=>rows.push({id:x.id,...x.data()}));
+      rows.sort((a,z)=>(z.applicationDate?.seconds||0)-(a.applicationDate?.seconds||0));
+      if(rows[0]?.businessId){
+        const bs=await getDoc(doc(db,"businesses",rows[0].businessId));
+        if(bs.exists()) b={id:bs.id,...bs.data()};
+      }
+    }
+    if(!b)return;
+    const name=(b.businessName||"Business").trim()||"Business";
+    document.getElementById("businessBrandName").textContent=name;
+    document.title=name+" | Customer Dashboard";
+    const logo=document.getElementById("businessLogo");
+    if(b.logoData){
+      const img=document.createElement("img");
+      img.src=b.logoData;
+      img.alt=name+" logo";
+      logo.replaceChildren(img);
+    }else{
+      logo.textContent=name.charAt(0).toUpperCase();
+    }
+  }catch(e){console.warn("Business branding could not be loaded",e)}
+}
+
 async function loadService(){
  if(!serviceId)return;
  try{
@@ -83,7 +114,7 @@ applyForm.onsubmit=async e=>{
 };
 profileForm.onsubmit=async e=>{e.preventDefault();try{await setDoc(doc(db,"users",uid),{name:profileName.value.trim(),mobile:profileMobile.value.replace(/\D/g,"")},{merge:true});await loadUser();show("Profile updated.","ok")}catch(e){show("Profile update failed.","err")}};
 clearApply.onclick=()=>{appDetails.value=""};logout.onclick=()=>signOut(auth).then(()=>location.href="customer-login.html");
-onAuthStateChanged(auth,async user=>{if(!user){location.href=`customer-login.html?business=${encodeURIComponent(business)}${serviceId?"&service="+encodeURIComponent(serviceId):""}`;return}uid=user.uid;await loadUser();await loadService();await loadApplications()});
+onAuthStateChanged(auth,async user=>{if(!user){location.href=`customer-login.html?business=${encodeURIComponent(business)}${serviceId?"&service="+encodeURIComponent(serviceId):""}`;return}uid=user.uid;await loadUser();await loadBusinessBrand();await loadService();await loadApplications()});
 </script>
 </body>
 </html>
