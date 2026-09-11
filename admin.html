@@ -3,36 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Admin Panel | BizSaarthi 360</title>
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>BizSaarthi 360 | Admin Panel V3</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}.top{height:70px;background:#fff;border-bottom:1px solid #e5eaf1;display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;z-index:20}.brand{font-size:21px;font-weight:800;color:#0f4c81}.brand strong{color:#1769aa}.top-right{display:flex;gap:10px;align-items:center}.user{font-size:12px;color:#667085}.btn{border:0;border-radius:8px;padding:10px 14px;background:#0f4c81;color:#fff;font-weight:700;cursor:pointer}.btn.light{background:#edf2f7;color:#344054}.wrap{max-width:1250px;margin:auto;padding:25px}.head{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}.head h1{margin:0 0 5px;font-size:26px}.head p{margin:0;color:#718096;font-size:12px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:18px}.stat{background:#fff;border:1px solid #e5eaf1;border-radius:14px;padding:17px}.stat b{font-size:26px}.stat span{display:block;font-size:11px;color:#718096;margin-top:5px}.tabs{display:flex;gap:8px;background:#fff;border:1px solid #e5eaf1;padding:8px;border-radius:12px;margin-bottom:15px}.tab{border:0;background:#f3f6fa;color:#475467;border-radius:8px;padding:10px 15px;font-weight:700;cursor:pointer}.tab.active{background:#0f4c81;color:#fff}.card{background:#fff;border:1px solid #e5eaf1;border-radius:14px;padding:18px}.search{width:100%;padding:11px;border:1px solid #d9e0e8;border-radius:8px;margin-bottom:14px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:12px;min-width:850px}.table th,.table td{text-align:left;padding:11px;border-bottom:1px solid #edf0f4;vertical-align:top}.table th{background:#f8fafc}.badge{display:inline-block;padding:5px 9px;border-radius:14px;background:#eef6ff;color:#0f4c81;font-size:10px;font-weight:700}.select{padding:6px;border:1px solid #d9e0e8;border-radius:7px;font-size:11px}.empty{text-align:center;padding:25px;color:#718096}.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.login-card{width:100%;max-width:420px;background:#fff;border:1px solid #e5eaf1;border-radius:18px;padding:28px;box-shadow:0 15px 45px rgba(15,76,129,.1)}.login-card h1{margin:0 0 6px}.login-card p{color:#718096;font-size:12px}.form{display:flex;flex-direction:column;gap:10px}.form label{font-size:12px;font-weight:700}.form input{padding:12px;border:1px solid #d9e0e8;border-radius:9px}.msg{padding:10px;border-radius:8px;font-size:12px;margin:10px 0;display:none}.msg.show{display:block}.err{background:#fff0f0;color:#c62828}.ok{background:#e9f8ef;color:#18794e}.hidden{display:none!important}.danger{background:#fff0f0;color:#c62828;border:1px solid #ffd1d1;padding:12px;border-radius:10px;font-size:12px;margin-top:15px}.detail{color:#667085;font-size:11px;line-height:1.5}@media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.head{flex-direction:column;align-items:flex-start;gap:10px}.wrap{padding:15px}}@media(max-width:500px){.stats{grid-template-columns:1fr}.top{padding:0 14px}.user{display:none}.tabs{overflow:auto}.tab{white-space:nowrap}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}.top{height:70px;background:#fff;border-bottom:1px solid #e5eaf1;display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;z-index:20}.brand{font-size:21px;font-weight:800;color:#0f4c81}.brand strong{color:#1769aa}.top-right{display:flex;gap:10px;align-items:center}.user{font-size:12px;color:#667085}.btn{border:0;border-radius:8px;padding:10px 14px;background:#0f4c81;color:#fff;font-weight:700;cursor:pointer}.btn.light{background:#edf2f7;color:#344054}.wrap{max-width:1250px;margin:auto;padding:25px}.head{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}.head h1{margin:0 0 5px;font-size:26px}.head p{margin:0;color:#718096;font-size:12px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:18px}.stat{background:#fff;border:1px solid #e5eaf1;border-radius:14px;padding:17px}.stat b{font-size:26px}.stat span{display:block;font-size:11px;color:#718096;margin-top:5px}.tabs{display:flex;gap:8px;background:#fff;border:1px solid #e5eaf1;padding:8px;border-radius:12px;margin-bottom:15px}.tab{border:0;background:#f3f6fa;color:#475467;border-radius:8px;padding:10px 15px;font-weight:700;cursor:pointer}.tab.active{background:#0f4c81;color:#fff}.card{background:#fff;border:1px solid #e5eaf1;border-radius:14px;padding:18px}.search{width:100%;padding:11px;border:1px solid #d9e0e8;border-radius:8px;margin-bottom:14px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:12px;min-width:850px}.table th,.table td{text-align:left;padding:11px;border-bottom:1px solid #edf0f4;vertical-align:top}.table th{background:#f8fafc}.badge{display:inline-block;padding:5px 9px;border-radius:14px;background:#eef6ff;color:#0f4c81;font-size:10px;font-weight:700}.select{padding:6px;border:1px solid #d9e0e8;border-radius:7px;font-size:11px}.empty{text-align:center;padding:25px;color:#718096}.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.login-card{width:100%;max-width:430px;background:#fff;border:1px solid #e5eaf1;border-radius:18px;padding:28px;box-shadow:0 15px 45px rgba(15,76,129,.1)}.login-card h1{margin:0 0 6px}.login-card p{color:#718096;font-size:12px}.form{display:flex;flex-direction:column;gap:10px}.form label{font-size:12px;font-weight:700}.form input{padding:12px;border:1px solid #d9e0e8;border-radius:9px}.msg{padding:10px;border-radius:8px;font-size:12px;margin:10px 0;display:none}.msg.show{display:block}.err{background:#fff0f0;color:#c62828}.ok{background:#e9f8ef;color:#18794e}.hidden{display:none!important}.danger{background:#fff0f0;color:#c62828;border:1px solid #ffd1d1;padding:12px;border-radius:10px;font-size:12px;margin-top:15px}.detail{color:#667085;font-size:11px;line-height:1.5}.debug{background:#f8fafc;border:1px solid #e5eaf1;border-radius:9px;padding:10px;margin-top:12px;font-size:11px;color:#475467;word-break:break-all}.debug b{color:#172033}@media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.head{flex-direction:column;align-items:flex-start;gap:10px}.wrap{padding:15px}}@media(max-width:500px){.stats{grid-template-columns:1fr}.top{padding:0 14px}.user{display:none}.tabs{overflow:auto}.tab{white-space:nowrap}}
 </style>
 </head>
 <body>
-<div id="loginView" class="login"><div class="login-card"><h1>Admin Panel</h1><p>BizSaarthi 360 administration</p><div id="loginMsg" class="msg"></div><form id="loginForm" class="form"><label>Email</label><input id="email" type="email" required autocomplete="email"><label>Password</label><input id="password" type="password" required autocomplete="current-password"><button class="btn" type="submit">Admin Login</button></form><button type="button" id="forgotPassword" class="btn light" style="width:100%;margin-top:10px">Forgot / Reset Password</button><div id="resetMsg" class="msg"></div><div class="danger">Only an account with <b>role = admin</b> in Firestore can access this panel.</div></div></div>
-<div id="appView" class="hidden"><header class="top"><div class="brand">BizSaarthi <strong>360</strong> — Admin</div><div class="top-right"><span id="adminEmail" class="user"></span><button class="btn light" id="resetPasswordTop">Reset Password</button><button class="btn light" id="logout">Logout</button></div></header><main class="wrap"><div class="head"><div><h1>Admin Dashboard</h1><p>Manage businesses, customers and service applications.</p></div></div><div id="appMsg" class="msg"></div><section class="stats"><div class="stat"><b id="businessCount">0</b><span>Businesses</span></div><div class="stat"><b id="customerCount">0</b><span>Customers</span></div><div class="stat"><b id="applicationCount">0</b><span>Applications</span></div><div class="stat"><b id="pendingCount">0</b><span>Pending / Review</span></div><div class="stat"><b id="serviceCount">0</b><span>Services</span></div></section><div class="tabs"><button class="tab active" data-tab="overview">Overview</button><button class="tab" data-tab="businesses">Businesses</button><button class="tab" data-tab="customers">Customers</button><button class="tab" data-tab="applications">Applications</button></div><section id="overview" class="card"><h2 style="margin-top:0">System Overview</h2><p class="detail">Admin can see platform-wide counts and manage application status. Business owners remain isolated from each other by Firestore security rules.</p><div id="overviewText" class="detail">Loading...</div></section><section id="businesses" class="card hidden"><input id="businessSearch" class="search" placeholder="Search business, owner, email or mobile"><div class="table-wrap"><table class="table"><thead><tr><th>Business</th><th>Owner</th><th>Contact</th><th>Location</th><th>Status</th><th>Public Page</th></tr></thead><tbody id="businessBody"></tbody></table></div></section><section id="customers" class="card hidden"><input id="customerSearch" class="search" placeholder="Search customer, email or mobile"><div class="table-wrap"><table class="table"><thead><tr><th>Customer</th><th>Contact</th><th>Applications</th><th>Last Service</th><th>Last Status</th></tr></thead><tbody id="customerBody"></tbody></table></div></section><section id="applications" class="card hidden"><input id="applicationSearch" class="search" placeholder="Search customer, business, service or application number"><div class="table-wrap"><table class="table"><thead><tr><th>Customer</th><th>Business</th><th>Service</th><th>Application</th><th>Date</th><th>Status</th></tr></thead><tbody id="applicationBody"></tbody></table></div></section></main></div>
+<div id="loginView" class="login">
+<div class="login-card">
+<h1>Admin Panel</h1><p>BizSaarthi 360 administration · V3</p>
+<div id="loginMsg" class="msg"></div>
+<form id="loginForm" class="form">
+<label>Email</label><input id="email" type="email" required autocomplete="username">
+<label>Password</label><input id="password" type="password" required autocomplete="current-password">
+<button class="btn" type="submit">Admin Login</button>
+</form>
+<button type="button" id="forgotPassword" class="btn light" style="width:100%;margin-top:10px">Forgot / Reset Password</button>
+<div id="resetMsg" class="msg"></div>
+<div id="debugBox" class="debug hidden"></div>
+<div class="danger">Admin access is granted only when the signed-in Firebase Auth UID has <b>role = admin</b> in <b>users/{UID}</b>.</div>
+</div></div>
+
+<div id="appView" class="hidden">
+<header class="top"><div class="brand">BizSaarthi <strong>360</strong> — Admin</div><div class="top-right"><span id="adminEmail" class="user"></span><button class="btn light" id="resetPasswordTop">Reset Password</button><button class="btn light" id="logout">Logout</button></div></header>
+<main class="wrap">
+<div class="head"><div><h1>Admin Dashboard</h1><p>Manage businesses, customers and service applications.</p></div></div>
+<div id="appMsg" class="msg"></div>
+<section class="stats"><div class="stat"><b id="businessCount">0</b><span>Businesses</span></div><div class="stat"><b id="customerCount">0</b><span>Customers</span></div><div class="stat"><b id="applicationCount">0</b><span>Applications</span></div><div class="stat"><b id="pendingCount">0</b><span>Pending / Review</span></div><div class="stat"><b id="serviceCount">0</b><span>Services</span></div></section>
+<div class="tabs"><button class="tab active" data-tab="overview">Overview</button><button class="tab" data-tab="businesses">Businesses</button><button class="tab" data-tab="customers">Customers</button><button class="tab" data-tab="applications">Applications</button></div>
+<section id="overview" class="card"><h2 style="margin-top:0">System Overview</h2><p class="detail">Admin can see platform-wide counts and manage application status. Business owners remain isolated from each other by Firestore security rules.</p><div id="overviewText" class="detail">Loading...</div></section>
+<section id="businesses" class="card hidden"><input id="businessSearch" class="search" placeholder="Search business, owner, email or mobile"><div class="table-wrap"><table class="table"><thead><tr><th>Business</th><th>Owner</th><th>Contact</th><th>Location</th><th>Status</th><th>Public Page</th></tr></thead><tbody id="businessBody"></tbody></table></div></section>
+<section id="customers" class="card hidden"><input id="customerSearch" class="search" placeholder="Search customer, email or mobile"><div class="table-wrap"><table class="table"><thead><tr><th>Customer</th><th>Contact</th><th>Applications</th><th>Last Service</th><th>Last Status</th></tr></thead><tbody id="customerBody"></tbody></table></div></section>
+<section id="applications" class="card hidden"><input id="applicationSearch" class="search" placeholder="Search customer, business, service or application number"><div class="table-wrap"><table class="table"><thead><tr><th>Customer</th><th>Business</th><th>Service</th><th>Application</th><th>Date</th><th>Status</th></tr></thead><tbody id="applicationBody"></tbody></table></div></section>
+</main></div>
+
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-import{getFirestore,collection,getDocs,doc,getDoc,getDocFromServer,updateDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import{getFirestore,collection,getDocs,doc,getDoc,updateDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import{firebaseConfig}from"./js/firebase-config.js";
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);let data={users:[],businesses:[],services:[],applications:[]};
-const $=id=>document.getElementById(id);const esc=v=>String(v??"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));const date=v=>v?.toDate?v.toDate().toLocaleString():"-";
-function msg(t,type="ok"){const e=$("appMsg");e.textContent=t;e.className="msg show "+type;setTimeout(()=>e.className="msg",4000)}
+
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+let data={users:[],businesses:[],services:[],applications:[]};
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const date=v=>v?.toDate?v.toDate().toLocaleString():"-";
+function showLogin(){ $("loginView").classList.remove("hidden"); $("appView").classList.add("hidden"); }
+function showApp(user){ $("loginView").classList.add("hidden"); $("appView").classList.remove("hidden"); $("adminEmail").textContent=user?.email||""; }
 function loginMsg(t,type="err"){const e=$("loginMsg");e.textContent=t;e.className="msg show "+type}
-function resetMsg(t,type="ok"){const e=$("resetMsg");if(!e)return;e.textContent=t;e.className="msg show "+type}
-async function sendReset(email){email=(email||$("email").value||"").trim();if(!email){resetMsg("Enter your admin email first.","err");$("email").focus();return}resetMsg("Sending password reset email...","ok");try{await sendPasswordResetEmail(auth,email);resetMsg("Password reset email sent. Check inbox and spam folder.","ok")}catch(e){console.error(e);resetMsg("Could not send reset email. Check Firebase Authentication email settings.","err")}}
-async function adminCheck(user){try{const s=await getDocFromServer(doc(db,"users",user.uid));if(!s.exists())return{ok:false,reason:"Admin profile not found for this UID."};const d=s.data();const role=String(d.role??"").trim().toLowerCase();return{ok:role==="admin",role:role,uid:s.id}}catch(e){console.error("ADMIN CHECK ERROR",e);return{ok:false,reason:"Firestore permission/network error while checking admin profile."}}}
-async function loadAll(){const[us,bs,ss,as]=await Promise.all([getDocs(collection(db,"users")),getDocs(collection(db,"businesses")),getDocs(collection(db,"services")),getDocs(collection(db,"applications"))]);data.users=us.docs.map(x=>({id:x.id,...x.data()}));data.businesses=bs.docs.map(x=>({id:x.id,...x.data()}));data.services=ss.docs.map(x=>({id:x.id,...x.data()}));data.applications=as.docs.map(x=>({id:x.id,...x.data()}));renderStats();renderBusinesses();renderCustomers();renderApplications()}
+function resetMsg(t,type="ok"){const e=$("resetMsg");e.textContent=t;e.className="msg show "+type}
+function appMsg(t,type="ok"){const e=$("appMsg");e.textContent=t;e.className="msg show "+type;setTimeout(()=>e.className="msg",4000)}
+function debug(t){const e=$("debugBox");e.innerHTML=t;e.classList.remove("hidden")}
+function clearDebug(){$("debugBox").classList.add("hidden");$("debugBox").textContent=""}
+
+async function checkAdmin(user){
+  if(!user)return{ok:false,reason:"No Firebase Auth user is signed in."};
+  try{
+    const ref=doc(db,"users",user.uid);
+    const snap=await getDoc(ref);
+    if(!snap.exists())return{ok:false,reason:"Admin profile not found in Firestore for this Auth UID.",uid:user.uid,exists:false};
+    const d=snap.data()||{};
+    const role=String(d.role??"").trim().toLowerCase();
+    const status=String(d.status??"active").trim().toLowerCase();
+    return{ok:role==="admin",reason:role==="admin"?"":"Firestore role is '"+(d.role??"")+"', not 'admin'.",uid:user.uid,exists:true,role,status};
+  }catch(e){
+    console.error("ADMIN CHECK",e);
+    return{ok:false,reason:"Firestore read failed: "+(e.code||e.message||"unknown error"),uid:user.uid,exists:false};
+  }
+}
+
+async function performLogin(e){
+  e.preventDefault();clearDebug();loginMsg("Signing in...","ok");
+  const email=$("email").value.trim(),password=$("password").value;
+  try{
+    const cred=await signInWithEmailAndPassword(auth,email,password);
+    const check=await checkAdmin(cred.user);
+    if(!check.ok){
+      debug("<b>Firebase Auth UID:</b> "+esc(cred.user.uid)+"<br><b>Firestore users document:</b> users/"+esc(cred.user.uid)+"<br><b>Role:</b> "+esc(check.role||"document not found")+"<br><b>Status:</b> "+esc(check.status||"-")+"<br><b>Reason:</b> "+esc(check.reason));
+      await signOut(auth);
+      loginMsg("Access denied: this Firebase account is not configured as admin.");
+      return;
+    }
+    showApp(cred.user);loginMsg("", "ok");await loadAll();
+  }catch(e){
+    console.error("LOGIN ERROR",e);
+    const code=e?.code||"";
+    const text=code.includes("invalid-credential")||code.includes("wrong-password")||code.includes("user-not-found")?"Incorrect email or password.":code.includes("too-many-requests")?"Too many login attempts. Please wait and try again.":code.includes("network")?"Network error. Check internet connection.":"Firebase login error: "+(code||e?.message||"unknown error");
+    loginMsg(text);
+  }
+}
+
+async function sendReset(email){
+  email=(email||$("email").value||"").trim();
+  if(!email){resetMsg("Enter the admin email first.","err");$("email").focus();return}
+  resetMsg("Sending password reset email...","ok");
+  try{await sendPasswordResetEmail(auth,email);resetMsg("Reset email sent. Check Inbox, Spam and Promotions.","ok")}
+  catch(e){console.error("RESET ERROR",e);resetMsg("Reset email failed: "+(e.code||e.message||"unknown error"),"err")}
+}
+
+async function loadAll(){
+  try{
+    const[us,bs,ss,as]=await Promise.all([getDocs(collection(db,"users")),getDocs(collection(db,"businesses")),getDocs(collection(db,"services")),getDocs(collection(db,"applications"))]);
+    data.users=us.docs.map(x=>({id:x.id,...x.data()}));data.businesses=bs.docs.map(x=>({id:x.id,...x.data()}));data.services=ss.docs.map(x=>({id:x.id,...x.data()}));data.applications=as.docs.map(x=>({id:x.id,...x.data()}));
+    renderStats();renderBusinesses();renderCustomers();renderApplications();
+  }catch(e){console.error(e);appMsg("Dashboard data could not be loaded: "+(e.code||e.message||"unknown error"),"err")}
+}
 function renderStats(){const customers=new Set(data.users.filter(x=>x.role==="customer").map(x=>x.id));$("businessCount").textContent=data.businesses.length;$("customerCount").textContent=customers.size;$("applicationCount").textContent=data.applications.length;$("pendingCount").textContent=data.applications.filter(x=>["pending","submitted","in_review"].includes(x.status)).length;$("serviceCount").textContent=data.services.length;$("overviewText").textContent=`${data.businesses.length} businesses, ${customers.size} customers, ${data.services.length} services and ${data.applications.length} applications are currently stored.`}
 function renderBusinesses(){const t=$("businessSearch").value.toLowerCase().trim();const rows=data.businesses.filter(x=>[x.businessName,x.ownerName,x.email,x.mobile,x.city,x.state].some(v=>String(v||"").toLowerCase().includes(t)));$("businessBody").innerHTML=rows.length?rows.map(x=>`<tr><td><b>${esc(x.businessName||"Business")}</b><br><span class="detail">Owner ID: ${esc(x.ownerId||x.id)}</span></td><td>${esc(x.ownerName||"-")}</td><td>${esc(x.mobile||"-")}<br>${esc(x.email||"-")}</td><td>${esc([x.city,x.state,x.pinCode].filter(Boolean).join(", ")||"-")}</td><td><span class="badge">${esc(x.status||"active")}</span></td><td><a target="_blank" href="business.html?business=${encodeURIComponent(x.publicSlug||"")}">Open</a></td></tr>`).join(""):"<tr><td colspan=6 class=empty>No businesses found.</td></tr>"}
 function renderCustomers(){const t=$("customerSearch").value.toLowerCase().trim();const users=data.users.filter(x=>x.role==="customer");const rows=users.filter(x=>[x.name,x.email,x.mobile,x.uid].some(v=>String(v||"").toLowerCase().includes(t)));$("customerBody").innerHTML=rows.length?rows.map(x=>{const apps=data.applications.filter(a=>a.customerId===x.id);apps.sort((a,b)=>(b.applicationDate?.seconds||0)-(a.applicationDate?.seconds||0));const last=apps[0];return`<tr><td><b>${esc(x.name||"Customer")}</b><br><span class="detail">ID: ${esc(x.id)}</span></td><td>${esc(x.mobile||"-")}<br>${esc(x.email||"-")}</td><td>${apps.length}</td><td>${esc(last?.serviceName||"-")}</td><td><span class="badge">${esc(last?.status||"-")}</span></td></tr>`}).join(""):"<tr><td colspan=5 class=empty>No customers found.</td></tr>"}
 function renderApplications(){const t=$("applicationSearch").value.toLowerCase().trim();const rows=data.applications.filter(x=>[x.customerName,x.customerEmail,x.customerMobile,x.businessName,x.serviceName,x.applicationNumber,x.details].some(v=>String(v||"").toLowerCase().includes(t)));$("applicationBody").innerHTML=rows.length?rows.map(x=>`<tr><td><b>${esc(x.customerName||"Customer")}</b><br>${esc(x.customerMobile||"")}<br>${esc(x.customerEmail||"")}</td><td>${esc(x.businessName||"Business")}</td><td>${esc(x.serviceName||"-")}</td><td><b>${esc(x.applicationNumber||x.id.slice(0,8))}</b><br><span class="detail">${esc(x.details||"")}</span></td><td>${esc(date(x.applicationDate))}</td><td><select class="select admin-status" data-id="${esc(x.id)}">${["pending","in_review","approved","rejected","completed"].map(s=>`<option value="${s}" ${x.status===s?"selected":""}>${s.replace("_"," ")}</option>`).join("")}</select></td></tr>`).join(""):"<tr><td colspan=6 class=empty>No applications found.</td></tr>";document.querySelectorAll(".admin-status").forEach(e=>e.onchange=()=>changeStatus(e.dataset.id,e.value))}
-async function changeStatus(id,status){try{await updateDoc(doc(db,"applications",id),{status,updatedAt:serverTimestamp()});msg("Application status updated.");await loadAll()}catch(e){console.error(e);msg("Could not update application status. Check Firestore rules.","err")}}
-$("loginForm").onsubmit=async e=>{e.preventDefault();loginMsg("Signing in...","ok");try{const c=await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);const check=await adminCheck(c.user);if(!check.ok){await signOut(auth);loginMsg(check.reason||"Access denied. This account is not an admin.");return}$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");$("adminEmail").textContent=c.user.email||"";await loadAll()}catch(e){console.error(e);loginMsg("Incorrect email/password or Firebase error. Check browser console for details.")}};
-$("logout").onclick=()=>signOut(auth);$("forgotPassword").onclick=()=>sendReset();$("resetPasswordTop").onclick=()=>sendReset(auth.currentUser?.email||$("email").value||"");
-onAuthStateChanged(auth,async u=>{if(!u){$("loginView").classList.remove("hidden");$("appView").classList.add("hidden");return}try{const check=await adminCheck(u);if(check.ok){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");$("adminEmail").textContent=u.email||"";await loadAll()}else await signOut(auth)}catch(e){console.error(e);await signOut(auth)}});
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section:not(.stats)").forEach(x=>x.classList.add("hidden"));$(b.dataset.tab).classList.remove("hidden")});
+async function changeStatus(id,status){try{await updateDoc(doc(db,"applications",id),{status,updatedAt:serverTimestamp()});appMsg("Application status updated.");await loadAll()}catch(e){console.error(e);appMsg("Could not update application status: "+(e.code||e.message||"unknown error"),"err")}}
+
+$("loginForm").addEventListener("submit",performLogin);
+$("logout").onclick=async()=>{await signOut(auth);showLogin();clearDebug();$("password").value=""};
+$("forgotPassword").onclick=()=>sendReset();
+$("resetPasswordTop").onclick=()=>sendReset(auth.currentUser?.email||$("email").value||"");
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){showLogin();return}
+  try{const check=await checkAdmin(user);if(check.ok){showApp(user);await loadAll()}else{showLogin();debug("<b>Signed-in UID:</b> "+esc(user.uid)+"<br><b>Expected Firestore document:</b> users/"+esc(user.uid)+"<br><b>Role:</b> "+esc(check.role||"not found")+"<br><b>Reason:</b> "+esc(check.reason));loginMsg("Access denied: this Firebase account is not configured as admin.");await signOut(auth)}}catch(e){console.error(e);showLogin();loginMsg("Admin verification error: "+(e.code||e.message||"unknown error"))}
+});
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("main section").forEach(x=>x.classList.add("hidden"));$(b.dataset.tab).classList.remove("hidden")});
 $("businessSearch").oninput=renderBusinesses;$("customerSearch").oninput=renderCustomers;$("applicationSearch").oninput=renderApplications;
 </script>
 </body>
