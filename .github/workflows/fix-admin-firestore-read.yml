@@ -12,20 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Patch admin.html
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p = Path('admin.html')
-          s = p.read_text(encoding='utf-8')
-
-          s = s.replace(
-              'getFirestore,collection,getDocs,doc,getDoc,updateDoc,serverTimestamp',
-              'getFirestore,collection,getDocs,doc,getDoc,getDocFromServer,updateDoc,serverTimestamp'
-          )
-
-          old = '''async function checkAdmin(user){
+          p=Path('admin.html'); s=p.read_text(encoding='utf-8')
+          s=s.replace('getFirestore,collection,getDocs,doc,getDoc,updateDoc,serverTimestamp','getFirestore,collection,getDocs,doc,getDoc,getDocFromServer,updateDoc,serverTimestamp')
+          old='''async function checkAdmin(user){
   if(!user)return{ok:false,reason:"No Firebase Auth user is signed in."};
   try{
     const ref=doc(db,"users",user.uid);
@@ -40,8 +33,7 @@ jobs:
     return{ok:false,reason:"Firestore read failed: "+(e.code||e.message||"unknown error"),uid:user.uid,exists:false};
   }
 }'''
-
-          new = '''async function checkAdmin(user){
+          new='''async function checkAdmin(user){
   if(!user)return{ok:false,reason:"No Firebase Auth user is signed in."};
   try{
     const ref=doc(db,"users",user.uid);
@@ -57,27 +49,16 @@ jobs:
     return{ok:false,reason:"Firestore read failed: "+(e.code||e.message||"unknown error"),uid:user.uid,exists:false,projectId:app.options.projectId||"unknown"};
   }
 }'''
-
-          if old not in s:
-              raise SystemExit('checkAdmin block not found')
-          s = s.replace(old, new)
-
-          old_debug = '''debug("<b>Firebase Auth UID:</b> "+esc(cred.user.uid)+"<br><b>Firestore users document:</b> users/"+esc(cred.user.uid)+"<br><b>Role:</b> "+esc(check.role||"document not found")+"<br><b>Status:</b> "+esc(check.status||"-")+"<br><b>Reason:</b> "+esc(check.reason));'''
-          new_debug = '''debug("<b>Firebase Project:</b> "+esc(check.projectId||app.options.projectId||"unknown")+"<br><b>Firebase Auth UID:</b> "+esc(cred.user.uid)+"<br><b>Firestore users document:</b> users/"+esc(cred.user.uid)+"<br><b>Document exists:</b> "+esc(String(check.exists))+"<br><b>Role:</b> "+esc(check.role||"document not found")+"<br><b>Status:</b> "+esc(check.status||"-")+"<br><b>Fields:</b> "+esc(check.fields||"-")+"<br><b>Reason:</b> "+esc(check.reason));'''
-          if old_debug in s:
-              s = s.replace(old_debug, new_debug)
-
-          p.write_text(s, encoding='utf-8')
+          if old not in s: raise SystemExit('checkAdmin block not found')
+          s=s.replace(old,new)
+          oldd='''debug("<b>Firebase Auth UID:</b> "+esc(cred.user.uid)+"<br><b>Firestore users document:</b> users/"+esc(cred.user.uid)+"<br><b>Role:</b> "+esc(check.role||"document not found")+"<br><b>Status:</b> "+esc(check.status||"-")+"<br><b>Reason:</b> "+esc(check.reason));'''
+          newd='''debug("<b>Firebase Project:</b> "+esc(check.projectId||app.options.projectId||"unknown")+"<br><b>Firebase Auth UID:</b> "+esc(cred.user.uid)+"<br><b>Firestore users document:</b> users/"+esc(cred.user.uid)+"<br><b>Document exists:</b> "+esc(String(check.exists))+"<br><b>Role:</b> "+esc(check.role||"document not found")+"<br><b>Status:</b> "+esc(check.status||"-")+"<br><b>Fields:</b> "+esc(check.fields||"-")+"<br><b>Reason:</b> "+esc(check.reason));'''
+          if oldd in s: s=s.replace(oldd,newd)
+          p.write_text(s,encoding='utf-8')
           PY
-
       - name: Commit patched admin.html
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add admin.html
-          if git diff --cached --quiet; then
-            echo "No changes needed"
-          else
-            git commit -m "Fix admin Firestore server read"
-            git push
-          fi
+          if git diff --cached --quiet; then echo "No changes needed"; else git commit -m "Fix admin Firestore server read"; git push; fi
