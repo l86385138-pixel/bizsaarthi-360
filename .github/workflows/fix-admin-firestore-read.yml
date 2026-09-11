@@ -1,0 +1,83 @@
+name: Fix Admin Firestore Read
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Patch admin.html
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('admin.html')
+          s = p.read_text(encoding='utf-8')
+
+          s = s.replace(
+              'getFirestore,collection,getDocs,doc,getDoc,updateDoc,serverTimestamp',
+              'getFirestore,collection,getDocs,doc,getDoc,getDocFromServer,updateDoc,serverTimestamp'
+          )
+
+          old = '''async function checkAdmin(user){
+  if(!user)return{ok:false,reason:"No Firebase Auth user is signed in."};
+  try{
+    const ref=doc(db,"users",user.uid);
+    const snap=await getDoc(ref);
+    if(!snap.exists())return{ok:false,reason:"Admin profile not found in Firestore for this Auth UID.",uid:user.uid,exists:false};
+    const d=snap.data()||{};
+    const role=String(d.role??"").trim().toLowerCase();
+    const status=String(d.status??"active").trim().toLowerCase();
+    return{ok:role==="admin",reason:role==="admin"?"":"Firestore role is '"+(d.role??"")+"', not 'admin'.",uid:user.uid,exists:true,role,status};
+  }catch(e){
+    console.error("ADMIN CHECK",e);
+    return{ok:false,reason:"Firestore read failed: "+(e.code||e.message||"unknown error"),uid:user.uid,exists:false};
+  }
+}'''
+
+          new = '''async function checkAdmin(user){
+  if(!user)return{ok:false,reason:"No Firebase Auth user is signed in."};
+  try{
+    const ref=doc(db,"users",user.uid);
+    const snap=await getDocFromServer(ref);
+    const projectId=app.options.projectId||"unknown";
+    if(!snap.exists())return{ok:false,reason:"Admin profile not found in Firestore for this Auth UID.",uid:user.uid,exists:false,projectId};
+    const d=snap.data()||{};
+    const role=String(d.role??"").trim().toLowerCase();
+    const status=String(d.status??"active").trim().toLowerCase();
+    return{ok:role==="admin",reason:role==="admin"?"":"Firestore role is '"+(d.role??"")+"', not 'admin'.",uid:user.uid,exists:true,role,status,projectId,fields:Object.keys(d).join(", ")};
+  }catch(e){
+    console.error("ADMIN CHECK",e);
+    return{ok:false,reason:"Firestore read failed: "+(e.code||e.message||"unknown error"),uid:user.uid,exists:false,projectId:app.options.projectId||"unknown"};
+  }
+}'''
+
+          if old not in s:
+              raise SystemExit('checkAdmin block not found')
+          s = s.replace(old, new)
+
+          old_debug = '''debug("<b>Firebase Auth UID:</b> "+esc(cred.user.uid)+"<br><b>Firestore users document:</b> users/"+esc(cred.user.uid)+"<br><b>Role:</b> "+esc(check.role||"document not found")+"<br><b>Status:</b> "+esc(check.status||"-")+"<br><b>Reason:</b> "+esc(check.reason));'''
+          new_debug = '''debug("<b>Firebase Project:</b> "+esc(check.projectId||app.options.projectId||"unknown")+"<br><b>Firebase Auth UID:</b> "+esc(cred.user.uid)+"<br><b>Firestore users document:</b> users/"+esc(cred.user.uid)+"<br><b>Document exists:</b> "+esc(String(check.exists))+"<br><b>Role:</b> "+esc(check.role||"document not found")+"<br><b>Status:</b> "+esc(check.status||"-")+"<br><b>Fields:</b> "+esc(check.fields||"-")+"<br><b>Reason:</b> "+esc(check.reason));'''
+          if old_debug in s:
+              s = s.replace(old_debug, new_debug)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit patched admin.html
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          if git diff --cached --quiet; then
+            echo "No changes needed"
+          else
+            git commit -m "Fix admin Firestore server read"
+            git push
+          fi
