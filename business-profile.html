@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -615,6 +614,23 @@ textarea{
   <div class="loading-text">Loading business profile...</div>
 </div>
 
+<script>
+(function(){
+  window.__bizProfileHideLoading=function(){
+    var el=document.getElementById("loadingScreen");
+    if(el) el.style.display="none";
+  };
+  window.setTimeout(function(){
+    var el=document.getElementById("loadingScreen");
+    if(el){
+      var text=el.querySelector(".loading-text");
+      if(text) text.textContent="Unable to load profile. Please refresh.";
+      el.style.display="none";
+    }
+  },12000);
+})();
+</script>
+
 <div class="overlay" id="overlay"></div>
 
 <aside class="sidebar" id="sidebar">
@@ -1194,7 +1210,11 @@ function showMessage(text,type){
 
 function hideLoading(){
 
-  loadingScreen.style.display = "none";
+  if(window.__bizProfileHideLoading){
+    window.__bizProfileHideLoading();
+  }else if(loadingScreen){
+    loadingScreen.style.display = "none";
+  }
 
 }
 
@@ -1519,6 +1539,7 @@ onAuthStateChanged(
 
     if(!user){
 
+      hideLoading();
       window.location.href =
         "index.html";
 
@@ -2208,6 +2229,8 @@ window.goTo =
     window.location.href =
       page;
 
+  };
+
 /* MOBILE MENU */
 
 document
@@ -2251,4 +2274,3 @@ document
 
 </body>
 </html>
-```
