@@ -11,22 +11,26 @@ service cloud.firestore {
       return signedIn() && request.auth.uid == id;
     }
 
+    function admin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
     match /users/{userId} {
       allow create: if owner(userId);
-      allow read, update, delete: if owner(userId);
+      allow read, update, delete: if owner(userId) || admin();
     }
 
     match /businesses/{businessId} {
       allow read: if true;
-      allow create, update, delete: if owner(businessId);
+      allow create, update, delete: if owner(businessId) || admin();
     }
 
     match /services/{serviceId} {
       allow read: if true;
-      allow create: if signedIn()
-        && request.resource.data.businessId == request.auth.uid;
-      allow update, delete: if signedIn()
-        && resource.data.businessId == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.businessId == request.auth.uid;
+      allow update, delete: if signedIn() && (resource.data.businessId == request.auth.uid || admin());
     }
 
     match /applications/{applicationId} {
@@ -39,12 +43,14 @@ service cloud.firestore {
           resource.data.customerId == request.auth.uid
           || resource.data.businessId == request.auth.uid
           || resource.data.ownerId == request.auth.uid
+          || admin()
         );
 
       allow update: if signedIn()
         && (
           resource.data.businessId == request.auth.uid
           || resource.data.ownerId == request.auth.uid
+          || admin()
         );
 
       allow delete: if signedIn()
@@ -52,6 +58,7 @@ service cloud.firestore {
           resource.data.customerId == request.auth.uid
           || resource.data.businessId == request.auth.uid
           || resource.data.ownerId == request.auth.uid
+          || admin()
         );
     }
 
@@ -60,6 +67,8 @@ service cloud.firestore {
         && (
           resource.data.customerId == request.auth.uid
           || resource.data.businessId == request.auth.uid
+          || resource.data.ownerId == request.auth.uid
+          || admin()
         );
 
       allow create: if signedIn()
@@ -67,30 +76,42 @@ service cloud.firestore {
         && (
           request.resource.data.customerId == request.auth.uid
           || request.resource.data.businessId == request.auth.uid
+          || request.resource.data.ownerId == request.auth.uid
+          || admin()
         );
 
-      allow update, delete: if false;
+      allow update, delete: if admin();
+    }
+
+    match /businessCustomers/{customerRecordId} {
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
+      allow read: if signedIn()
+        && (
+          resource.data.ownerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+          || resource.data.customerId == request.auth.uid
+          || admin()
+        );
+      allow update, delete: if signedIn()
+        && (
+          resource.data.ownerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+          || resource.data.customerId == request.auth.uid
+          || admin()
+        );
     }
 
     match /notifications/{notificationId} {
-      allow read, update: if signedIn()
-        && resource.data.userId == request.auth.uid;
-      allow create: if signedIn()
-        && request.resource.data.userId == request.auth.uid;
-      allow delete: if signedIn()
-        && resource.data.userId == request.auth.uid;
+      allow read, update: if signedIn() && (resource.data.userId == request.auth.uid || admin());
+      allow create: if signedIn() && (request.resource.data.userId == request.auth.uid || admin());
+      allow delete: if signedIn() && (resource.data.userId == request.auth.uid || admin());
     }
 
     match /reports/{reportId} {
-      allow read: if signedIn()
-        && resource.data.businessId == request.auth.uid;
-      allow create: if signedIn()
-        && request.resource.data.businessId == request.auth.uid;
-      allow update: if signedIn()
-        && resource.data.businessId == request.auth.uid
-        && request.resource.data.businessId == request.auth.uid;
-      allow delete: if signedIn()
-        && resource.data.businessId == request.auth.uid;
+      allow read: if signedIn() && (resource.data.businessId == request.auth.uid || admin());
+      allow create: if signedIn() && (request.resource.data.businessId == request.auth.uid || admin());
+      allow update: if signedIn() && (resource.data.businessId == request.auth.uid || admin());
+      allow delete: if signedIn() && (resource.data.businessId == request.auth.uid || admin());
     }
 
     match /{document=**} {
