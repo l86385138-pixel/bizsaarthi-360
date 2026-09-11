@@ -1,0 +1,123 @@
+name: Fix Business Profile Loading
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fix broken navigation function and add loading failsafe
+        shell: python
+        run: |
+          from pathlib import Path
+
+          p = Path('business-profile.html')
+          s = p.read_text(encoding='utf-8')
+
+          # The current file has an unclosed window.goTo function.
+          # That syntax error prevents the entire module from executing,
+          # so the loading overlay never gets hidden.
+          old = '''window.goTo =
+  function(page){
+
+    window.location.href =
+      page;
+
+/* MOBILE MENU */'''
+
+          new = '''window.goTo =
+  function(page){
+
+    window.location.href =
+      page;
+  };
+
+/* MOBILE MENU */'''
+
+          if old in s:
+              s = s.replace(old, new, 1)
+              print('Fixed unclosed window.goTo function.')
+          else:
+              print('window.goTo pattern already fixed or changed.')
+
+          # Make loading impossible to remain forever even if Firebase/CDN
+          # has a runtime problem. This does not change the application logic.
+          marker = '''function hideLoading(){
+
+  loadingScreen.style.display = "none";
+
+}'''
+
+          enhanced = '''function hideLoading(){
+
+  if(loadingScreen){
+    loadingScreen.style.display = "none";
+    loadingScreen.setAttribute("aria-hidden","true");
+  }
+
+}
+
+/* FINAL LOADING FAILSAFE */
+setTimeout(function(){
+  if(loadingScreen && getComputedStyle(loadingScreen).display !== "none"){
+    hideLoading();
+    showMessage("Profile loading timed out. Please refresh the page and try again.","error");
+  }
+},12000);'''
+
+          if marker in s and 'FINAL LOADING FAILSAFE' not in s:
+              s = s.replace(marker, enhanced, 1)
+              print('Added loading failsafe.')
+
+          p.write_text(s, encoding='utf-8')
+
+      - name: Validate business profile JavaScript
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import subprocess
+          import tempfile
+
+          text = Path('business-profile.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script(?:\s+[^>]*)?>([\s\S]*?)</script>', text, re.I)
+          if not scripts:
+              raise SystemExit('No script block found')
+
+          for i, script in enumerate(scripts, 1):
+              if not script.strip():
+                  continue
+              with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False, encoding='utf-8') as f:
+                  f.write(script)
+                  name=f.name
+              r=subprocess.run(['node','--check',name],text=True,capture_output=True)
+              Path(name).unlink(missing_ok=True)
+              if r.returncode:
+                  print(r.stderr)
+                  raise SystemExit(1)
+          print('Business Profile JavaScript syntax OK.')
+          PY
+
+      - name: Commit fix
+        run: |
+          if git diff --quiet -- business-profile.html; then
+            echo "No fix needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add business-profile.html
+          git commit -m "Fix Business Profile loading screen [skip ci]"
+          git push
