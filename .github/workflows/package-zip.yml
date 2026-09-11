@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   package:
@@ -13,6 +13,75 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fix known Business Profile syntax issue
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("business-profile.html")
+          text = path.read_text(encoding="utf-8")
+
+          # The previous file had one extra closing `};` immediately before
+          # the Mobile Menu section. That prevented the entire module from
+          # executing, leaving the loading screen permanently visible.
+          marker = "\n\n  };\n\n\n/* MOBILE MENU */"
+          fixed = text.replace(marker, "\n\n/* MOBILE MENU */", 1)
+
+          if fixed != text:
+              path.write_text(fixed, encoding="utf-8")
+              print("Business Profile syntax fixed.")
+          else:
+              print("Business Profile syntax was already fixed.")
+
+      - name: Validate JavaScript syntax
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          import subprocess
+          import tempfile
+
+          failures = []
+
+          for path in list(Path(".").glob("*.html")) + list(Path("js").glob("*.js")):
+              text = path.read_text(encoding="utf-8")
+              if path.suffix == ".html":
+                  scripts = re.findall(r'<script(?:\s+[^>]*)?>([\s\S]*?)</script>', text, re.I)
+              else:
+                  scripts = [text]
+
+              for i, script in enumerate(scripts, 1):
+                  if not script.strip():
+                      continue
+                  with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False, encoding="utf-8") as f:
+                      f.write(script)
+                      temp = f.name
+                  result = subprocess.run(["node", "--check", temp], text=True, capture_output=True)
+                  Path(temp).unlink(missing_ok=True)
+                  if result.returncode != 0:
+                      failures.append(f"{path} script {i}: {result.stderr.strip()}")
+
+          if failures:
+              print("JavaScript syntax errors found:")
+              print("\n".join(failures))
+              raise SystemExit(1)
+
+          print("JavaScript syntax validation passed.")
+
+      - name: Commit automatic fixes
+        run: |
+          if git diff --quiet -- business-profile.html; then
+            echo "No automatic fixes to commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add business-profile.html
+            git commit -m "Fix Business Profile loading syntax [skip ci]"
+            git push
+          fi
 
       - name: Create ZIP
         run: |
