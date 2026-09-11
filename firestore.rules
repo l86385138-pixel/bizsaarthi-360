@@ -2,76 +2,68 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    function signedIn() { return request.auth != null; }
-    function owner(id) { return signedIn() && request.auth.uid == id; }
-    function admin() {
-      return signedIn()
-        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    /* Current BizSaarthi admin Auth UID. Using a fixed UID here avoids
+       recursive/cyclical users->isAdmin->users rule evaluation. */
+    function isAdmin() {
+      return signedIn() && request.auth.uid == 'FFwsJ3ixw8c7Cfdrj2z16OiO6AZ2';
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
     }
 
     match /users/{userId} {
-      allow create: if owner(userId);
-      allow read, update, delete: if owner(userId) || admin();
+      allow create: if isOwner(userId);
+      allow read, update, delete: if isOwner(userId) || isAdmin();
     }
 
     match /businesses/{businessId} {
       allow read: if true;
-      allow create, update, delete: if owner(businessId) || admin();
+      allow create: if signedIn() && (request.resource.data.ownerId == request.auth.uid || isAdmin());
+      allow update, delete: if signedIn() && (resource.data.ownerId == request.auth.uid || isAdmin());
     }
 
     match /services/{serviceId} {
       allow read: if true;
-      allow create: if signedIn() && request.resource.data.businessId == request.auth.uid;
-      allow update, delete: if signedIn() && (resource.data.businessId == request.auth.uid || admin());
+      allow create: if signedIn() && (request.resource.data.businessId == request.auth.uid || isAdmin());
+      allow update, delete: if signedIn() && (resource.data.businessId == request.auth.uid || isAdmin());
     }
 
     match /applications/{applicationId} {
-      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid && request.resource.data.businessId != null;
-      allow read, update, delete: if signedIn() && (
-        resource.data.customerId == request.auth.uid ||
-        resource.data.businessId == request.auth.uid ||
-        resource.data.ownerId == request.auth.uid ||
-        admin()
-      );
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
+      allow read: if signedIn() && (resource.data.customerId == request.auth.uid || resource.data.businessId == request.auth.uid || resource.data.ownerId == request.auth.uid || isAdmin());
+      allow update: if signedIn() && (resource.data.businessId == request.auth.uid || resource.data.ownerId == request.auth.uid || isAdmin());
+      allow delete: if signedIn() && (resource.data.customerId == request.auth.uid || resource.data.businessId == request.auth.uid || resource.data.ownerId == request.auth.uid || isAdmin());
     }
 
     match /applicationHistory/{historyId} {
-      allow read: if signedIn() && (
-        resource.data.customerId == request.auth.uid ||
-        resource.data.businessId == request.auth.uid ||
-        resource.data.ownerId == request.auth.uid ||
-        admin()
-      );
-      allow create: if signedIn() && (
-        (request.resource.data.updatedBy == request.auth.uid && (
-          request.resource.data.customerId == request.auth.uid ||
-          request.resource.data.businessId == request.auth.uid ||
-          request.resource.data.ownerId == request.auth.uid
-        )) || admin()
-      );
-      allow update, delete: if admin();
+      allow read: if signedIn() && (resource.data.customerId == request.auth.uid || resource.data.businessId == request.auth.uid || resource.data.ownerId == request.auth.uid || isAdmin());
+      allow create: if signedIn() && ((request.resource.data.updatedBy == request.auth.uid && (request.resource.data.customerId == request.auth.uid || request.resource.data.businessId == request.auth.uid || request.resource.data.ownerId == request.auth.uid)) || isAdmin());
+      allow update, delete: if isAdmin();
     }
 
     match /businessCustomers/{customerRecordId} {
-      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
-      allow read, update, delete: if signedIn() && (
-        resource.data.ownerId == request.auth.uid ||
-        resource.data.businessId == request.auth.uid ||
-        resource.data.customerId == request.auth.uid ||
-        admin()
-      );
+      allow create: if signedIn() && (request.resource.data.customerId == request.auth.uid || isAdmin());
+      allow read: if signedIn() && (resource.data.ownerId == request.auth.uid || resource.data.businessId == request.auth.uid || resource.data.customerId == request.auth.uid || isAdmin());
+      allow update, delete: if signedIn() && (resource.data.ownerId == request.auth.uid || resource.data.businessId == request.auth.uid || resource.data.customerId == request.auth.uid || isAdmin());
     }
 
     match /notifications/{notificationId} {
-      allow read, update, delete: if signedIn() && (resource.data.userId == request.auth.uid || admin());
-      allow create: if signedIn() && (request.resource.data.userId == request.auth.uid || admin());
+      allow read, update, delete: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if signedIn() && (request.resource.data.userId == request.auth.uid || isAdmin());
     }
 
     match /reports/{reportId} {
-      allow read, create, update, delete: if signedIn() && (resource.data.businessId == request.auth.uid || admin());
+      allow read, create, update, delete: if signedIn() && (resource.data.businessId == request.auth.uid || isAdmin());
     }
 
-    match /{document=**} { allow read, write: if false; }
+    match /{document=**} {
+      allow read, write: if false;
+    }
   }
 }
