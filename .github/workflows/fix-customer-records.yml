@@ -1,0 +1,94 @@
+name: Fix Customer Records
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fix-customer-records.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch customer sync
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('customer-dashboard.html')
+          s = p.read_text(encoding='utf-8')
+
+          old = '''const ref=await addDoc(collection(db,"applications"),data);await addDoc(collection(db,"applicationHistory"),{applicationId:ref.id,businessId,customerId:uid,status:"pending",message:"Application submitted by customer",updatedBy:uid,createdAt:serverTimestamp()});show("Application submitted successfully: "+appNo,"ok");appDetails.value="";await loadApplications()'''
+          new = '''const ref=await addDoc(collection(db,"applications"),{...data,ownerId:b.ownerId||businessId});await addDoc(collection(db,"applicationHistory"),{applicationId:ref.id,businessId,ownerId:b.ownerId||businessId,customerId:uid,status:"pending",message:"Application submitted by customer",updatedBy:uid,createdAt:serverTimestamp()});await setDoc(doc(db,"businessCustomers",businessId+"_"+uid),{businessId,ownerId:b.ownerId||businessId,customerId:uid,customerName:data.customerName,customerMobile:data.customerMobile,customerEmail:data.customerEmail,businessName:data.businessName,lastApplicationId:ref.id,lastApplicationNumber:appNo,lastServiceId:serviceId,lastServiceName:data.serviceName,lastStatus:"pending",createdAt:serverTimestamp(),updatedAt:serverTimestamp()},{merge:true});show("Application submitted successfully: "+appNo,"ok");appDetails.value="";await loadApplications()'''
+          if old in s:
+              s=s.replace(old,new)
+          else:
+              print('customer-dashboard application block not found; leaving existing file')
+          p.write_text(s,encoding='utf-8')
+
+          p = Path('customers.html')
+          s = p.read_text(encoding='utf-8')
+          start = s.index('async function load(){')
+          end = s.index('\nfunction render(){', start)
+          replacement = '''async function load(){try{const seen=new Set();rows=[];const appQueries=[query(collection(db,"applications"),where("businessId","==",uid)),query(collection(db,"applications"),where("ownerId","==",uid))];for(const q of appQueries){try{const snap=await getDocs(q);snap.forEach(x=>{if(!seen.has(x.id)){seen.add(x.id);rows.push({id:x.id,...x.data()})}})}catch(e){console.warn("Application query failed",e)}}const customerMap=new Map();for(const x of rows){if(x.customerId&&!customerMap.has(x.customerId))customerMap.set(x.customerId,x);try{await setDoc(doc(db,"businessCustomers",(x.businessId||uid)+"_"+x.customerId),{businessId:x.businessId||uid,ownerId:x.ownerId||uid,customerId:x.customerId,customerName:x.customerName||"Customer",customerMobile:x.customerMobile||"",customerEmail:x.customerEmail||"",businessName:x.businessName||"Business",lastApplicationId:x.id,lastApplicationNumber:x.applicationNumber||x.id.slice(0,8),lastServiceId:x.serviceId||"",lastServiceName:x.serviceName||"Service",lastStatus:x.status||"pending",updatedAt:serverTimestamp()},{merge:true})}catch(e){console.warn("Customer index write skipped",e)}}try{const cq1=query(collection(db,"businessCustomers"),where("businessId","==",uid));const cs1=await getDocs(cq1);cs1.forEach(x=>{const d=x.data();if(d.customerId&&!customerMap.has(d.customerId))customerMap.set(d.customerId,d)});const cq2=query(collection(db,"businessCustomers"),where("ownerId","==",uid));const cs2=await getDocs(cq2);cs2.forEach(x=>{const d=x.data();if(d.customerId&&!customerMap.has(d.customerId))customerMap.set(d.customerId,d)})}catch(e){console.warn("Customer index query failed",e)}$("customerCount").textContent=customerMap.size;$("applicationCount").textContent=rows.length;$("pendingCount").textContent=rows.filter(x=>["pending","submitted","in_review"].includes(x.status)).length;render()}catch(e){console.error(e);$("tbody").innerHTML='<tr><td colspan="7">Unable to load customers. Please publish the latest Firestore rules, then refresh.</td></tr>'}}'''
+          s=s[:start]+replacement+s[end:]
+          p.write_text(s,encoding='utf-8')
+
+          p = Path('firestore.rules')
+          s = p.read_text(encoding='utf-8')
+          marker = '''    match /applicationHistory/{historyId} {'''
+          block = '''    match /businessCustomers/{customerRecordId} {
+      allow create: if signedIn()
+        && request.resource.data.customerId == request.auth.uid;
+      allow read: if signedIn()
+        && (
+          resource.data.ownerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+          || resource.data.customerId == request.auth.uid
+        );
+      allow update: if signedIn()
+        && (
+          resource.data.ownerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+          || resource.data.customerId == request.auth.uid
+        );
+      allow delete: if signedIn()
+        && (
+          resource.data.ownerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+          || resource.data.customerId == request.auth.uid
+        );
+    }
+
+'''
+          if 'match /businessCustomers/{customerRecordId}' not in s:
+              s=s.replace(marker,block+marker)
+          s=s.replace('''          resource.data.customerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+        );''','''          resource.data.customerId == request.auth.uid
+          || resource.data.businessId == request.auth.uid
+          || resource.data.ownerId == request.auth.uid
+        );''')
+          s=s.replace('''          request.resource.data.customerId == request.auth.uid
+          || request.resource.data.businessId == request.auth.uid
+        );''','''          request.resource.data.customerId == request.auth.uid
+          || request.resource.data.businessId == request.auth.uid
+          || request.resource.data.ownerId == request.auth.uid
+        );''')
+          p.write_text(s,encoding='utf-8')
+          PY
+
+      - name: Commit fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add customer-dashboard.html customers.html firestore.rules
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix customer records and customer dashboard sync [skip ci]"
+          git push
